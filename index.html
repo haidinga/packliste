@@ -1,0 +1,1822 @@
+<!doctype html>
+<html lang="de">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="robots" content="noindex, nofollow">
+<meta name="theme-color" content="#2c2620">
+<title>Packliste · Bergliacht</title>
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-title" content="Packliste">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<style>
+/* ==========================================================
+   Tokens (aus dem Bergliacht-Webshop übernommen)
+========================================================== */
+
+@font-face { font-family: "Satoshi"; src: url("assets/fonts/Satoshi-Regular.woff") format("woff"); font-weight: 400; font-display: swap; }
+@font-face { font-family: "Satoshi"; src: url("assets/fonts/Satoshi-Medium.woff") format("woff"); font-weight: 500 600; font-display: swap; }
+@font-face { font-family: "Satoshi"; src: url("assets/fonts/Satoshi-Bold.woff") format("woff"); font-weight: 700; font-display: swap; }
+
+:root {
+    --color-primary: #6A4B3B;
+    --color-primary-light: #856555;
+    --color-primary-dark: #563B2F;
+    --color-accent: #5C7257;
+    --color-background: #F5F1EA;
+    --color-surface: #E8E1D7;
+    --color-surface-secondary: #EEE8DF;
+    --color-surface-tertiary: #DDD5CA;
+    --color-text-primary: #3B342D;
+    --color-text-secondary: #6E655C;
+    --color-text-muted: #8A8076;
+    --color-text-inverse: #F5F1EA;
+    --color-border: #C9BFB2;
+    --color-border-strong: #AFA397;
+    --color-warning: #C39232;
+    --color-danger: #B64D4D;
+    --color-info: #50739A;
+
+    --radius-xs: .25rem; --radius-sm: .5rem; --radius-md: .75rem; --radius-lg: 1rem; --radius-xl: 1.5rem; --radius-full: 9999px;
+
+    --shadow-xs: 0 1px 2px rgba(59, 52, 45, .04);
+    --shadow-sm: 0 2px 6px rgba(59, 52, 45, .06);
+    --shadow-md: 0 8px 20px rgba(59, 52, 45, .08);
+    --shadow-lg: 0 16px 40px rgba(59, 52, 45, .10);
+    --shadow-xl: 0 24px 60px rgba(59, 52, 45, .14);
+
+    --space-1: .25rem; --space-2: .5rem; --space-3: .75rem; --space-4: 1rem; --space-5: 1.25rem; --space-6: 1.5rem;
+    --space-8: 2rem; --space-10: 2.5rem; --space-12: 3rem; --space-16: 4rem; --space-20: 5rem; --space-24: 6rem;
+
+    --transition-fast: .15s ease; --transition-base: .25s ease; --transition-slow: .4s ease;
+
+    --font-family-base: "Satoshi", system-ui, sans-serif;
+    --font-size-xs: .75rem; --font-size-sm: .875rem; --font-size-base: 1rem; --font-size-md: 1.125rem;
+    --font-size-lg: 1.25rem; --font-size-xl: 1.5rem; --font-size-2xl: 2rem; --font-size-3xl: 2.5rem; --font-size-4xl: 3rem; --font-size-5xl: 4rem;
+
+    --container: 1280px;
+
+    /* Post-it-Papier wie in der Notizen-App */
+    --paper-shadow: 0 1px 1px rgba(59, 52, 45, .06), 0 12px 20px -10px rgba(59, 52, 45, .28);
+    --paper-radius: .25rem .25rem 1.1rem .25rem;
+}
+
+/* ==========================================================
+   Base
+========================================================== */
+
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+html { -webkit-text-size-adjust: 100%; }
+body {
+    font-family: var(--font-family-base);
+    font-size: var(--font-size-base);
+    line-height: 1.6;
+    color: var(--color-text-primary);
+    background: var(--color-background);
+    -webkit-font-smoothing: antialiased;
+    overflow-x: hidden;
+}
+body.is-locked { overflow: hidden; }
+button, input, select, textarea { font: inherit; color: inherit; }
+button { cursor: pointer; background: none; border: 0; }
+svg.icon { width: 1.25rem; height: 1.25rem; flex: none; fill: none; stroke: currentColor; stroke-width: 1.5; stroke-linecap: round; stroke-linejoin: round; }
+::selection { background: var(--color-primary); color: var(--color-text-inverse); }
+:focus-visible { outline: 2px solid var(--color-primary); outline-offset: 3px; border-radius: var(--radius-xs); }
+
+.container { width: 100%; max-width: var(--container); margin: 0 auto; padding: 0 var(--space-8); }
+.label { font-size: var(--font-size-xs); font-weight: 500; letter-spacing: .14em; text-transform: uppercase; }
+[hidden] { display: none !important; }
+
+.btn {
+    display: inline-flex; align-items: center; justify-content: center; gap: var(--space-2);
+    height: 2.75rem; padding: 0 var(--space-5);
+    border-radius: var(--radius-sm);
+    font-size: var(--font-size-sm); font-weight: 500; letter-spacing: .12em; text-transform: uppercase;
+    white-space: nowrap;
+    transition: background var(--transition-base), transform var(--transition-fast), box-shadow var(--transition-base), border-color var(--transition-base);
+}
+.btn:active { transform: translateY(1px); }
+.btn--dark { background: var(--color-primary); color: var(--color-text-inverse); }
+.btn--dark:hover { background: var(--color-primary-dark); box-shadow: var(--shadow-md); }
+.btn--line { border: 1px solid var(--color-border); color: var(--color-text-primary); }
+.btn--line:hover { border-color: var(--color-border-strong); background: var(--color-surface-secondary); }
+.btn--danger { background: var(--color-danger); color: var(--color-text-inverse); }
+.btn--danger:hover { background: #9e3f3f; box-shadow: var(--shadow-md); }
+.btn svg { width: 1.1rem; height: 1.1rem; }
+.icon-btn {
+    display: inline-grid; place-items: center;
+    width: 2.5rem; height: 2.5rem; border-radius: var(--radius-full);
+    transition: background var(--transition-fast), color var(--transition-fast);
+}
+
+/* Papierfarben (wie Notizen) */
+.p-sand   { --paper: #F2E6C8; --ink: #8A6A26; }
+.p-salbei { --paper: #DCE4D3; --ink: #4F6649; }
+.p-ton    { --paper: #EDD8C8; --ink: #6A4B3B; }
+.p-fels   { --paper: #D9E0E7; --ink: #45627F; }
+.p-leinen { --paper: #F7F3EC; --ink: #6E655C; }
+
+/* ==========================================================
+   Header
+========================================================== */
+
+.hero {
+    position: relative;
+    color: var(--color-text-inverse);
+    background:
+        linear-gradient(90deg, rgba(28, 23, 19, .72) 0%, rgba(28, 23, 19, .42) 50%, rgba(28, 23, 19, .15) 85%),
+        linear-gradient(0deg, rgba(28, 23, 19, .35), rgba(0, 0, 0, 0) 55%),
+        url("assets/images/hero-mobil.jpg") center 40% / cover no-repeat,
+        #2c2620;
+    padding-bottom: calc(var(--space-16) + 2rem);
+    padding-top: env(safe-area-inset-top);
+}
+.hero__bar { display: grid; grid-template-columns: 1fr auto 1fr; align-items: center; height: 5.5rem; }
+.hero__domain { font-size: var(--font-size-sm); opacity: .85; display: flex; align-items: center; gap: var(--space-2); }
+.sync { display: inline-flex; align-items: center; gap: var(--space-2); cursor: default; }
+.sync__dot { width: .5rem; height: .5rem; border-radius: 50%; background: #9fb894; box-shadow: 0 0 0 3px rgba(159, 184, 148, .25); transition: background var(--transition-base), box-shadow var(--transition-base); }
+.sync.is-saving .sync__dot { background: #e2c27a; box-shadow: 0 0 0 3px rgba(226, 194, 122, .25); animation: pulse 1s ease-in-out infinite; }
+.sync.is-offline .sync__dot { background: #b9aea2; box-shadow: 0 0 0 3px rgba(185, 174, 162, .25); }
+.sync.is-error .sync__dot { background: #e09a9a; box-shadow: 0 0 0 3px rgba(224, 154, 154, .3); }
+.sync.is-offline, .sync.is-error { cursor: pointer; }
+@keyframes pulse { 50% { opacity: .45; } }
+.logo { width: 3rem; height: 3rem; background: var(--color-text-inverse); -webkit-mask: url("assets/images/logo.svg") center / contain no-repeat; mask: url("assets/images/logo.svg") center / contain no-repeat; }
+.hero__actions { justify-self: end; display: flex; gap: var(--space-1); }
+.hero__actions .icon-btn:hover { background: rgba(245, 241, 234, .14); }
+
+.hero__content { display: flex; align-items: flex-end; justify-content: space-between; gap: var(--space-8); flex-wrap: wrap; padding-top: var(--space-8); }
+.hero__label { opacity: .9; margin-bottom: var(--space-4); }
+.hero__title { font-size: clamp(2.5rem, 6vw, 4rem); font-weight: 400; line-height: 1.02; letter-spacing: -.035em; overflow-wrap: anywhere; }
+.hero__stats { display: flex; flex-wrap: wrap; gap: var(--space-10); }
+.stat__value { font-size: var(--font-size-2xl); line-height: 1; letter-spacing: -.02em; white-space: nowrap; }
+.stat__label { margin-top: var(--space-2); opacity: .75; }
+
+/* ==========================================================
+   Reise-Karte (Ort, Datum, Dauer, Typ, Wetter)
+========================================================== */
+
+.trip {
+    position: relative; z-index: 5;
+    margin-top: calc(-1 * var(--space-16));
+    padding: var(--space-8);
+    background: var(--color-background);
+    border-radius: var(--radius-xl);
+    box-shadow: var(--shadow-xl);
+}
+.trip__grid { display: grid; grid-template-columns: minmax(0, 2fr) minmax(0, 1fr) minmax(0, 1fr); gap: var(--space-5); }
+.field__label { display: block; color: var(--color-text-muted); margin-bottom: var(--space-2); }
+.input {
+    width: 100%; height: 3rem;
+    padding: 0 var(--space-4);
+    border-radius: var(--radius-sm);
+    border: 1px solid var(--color-border);
+    background: var(--color-surface-secondary);
+    transition: border-color var(--transition-base), background var(--transition-base);
+}
+.input::placeholder { color: var(--color-text-muted); }
+.input:focus { outline: none; border-color: var(--color-border-strong); background: #fff; }
+.field__hint { margin-top: var(--space-2); font-size: var(--font-size-xs); color: var(--color-text-muted); min-height: 1.2em; }
+
+.place { position: relative; }
+.place svg.icon { position: absolute; left: var(--space-4); top: 1.5rem; translate: 0 -50%; color: var(--color-text-muted); pointer-events: none; }
+.place .input { padding-left: 2.85rem; }
+.suggest {
+    position: absolute; z-index: 20; left: 0; right: 0; top: calc(3rem + var(--space-2));
+    list-style: none; padding: var(--space-2);
+    background: #fff; border: 1px solid var(--color-border); border-radius: var(--radius-md);
+    box-shadow: var(--shadow-lg);
+}
+.suggest button { width: 100%; display: flex; justify-content: space-between; gap: var(--space-3); padding: var(--space-2) var(--space-3); border-radius: var(--radius-sm); text-align: left; }
+.suggest button:hover, .suggest button.is-active { background: var(--color-surface-secondary); }
+.suggest small { color: var(--color-text-muted); font-size: var(--font-size-sm); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.suggest .is-empty { padding: var(--space-2) var(--space-3); color: var(--color-text-muted); font-size: var(--font-size-sm); }
+
+.stepper { display: flex; align-items: center; height: 3rem; border: 1px solid var(--color-border); border-radius: var(--radius-sm); background: var(--color-surface-secondary); }
+.stepper button { width: 3rem; height: 100%; display: grid; place-items: center; color: var(--color-text-secondary); transition: color var(--transition-fast), background var(--transition-fast); }
+.stepper button:hover { color: var(--color-text-primary); background: var(--color-surface); }
+.stepper button:first-child { border-radius: var(--radius-sm) 0 0 var(--radius-sm); }
+.stepper button:last-child { border-radius: 0 var(--radius-sm) var(--radius-sm) 0; }
+.stepper input { flex: 1; min-width: 0; height: 100%; border: 0; background: transparent; text-align: center; font-weight: 500; -moz-appearance: textfield; }
+.stepper input::-webkit-inner-spin-button, .stepper input::-webkit-outer-spin-button { -webkit-appearance: none; }
+.stepper input:focus { outline: none; }
+.stepper span { padding: 0 var(--space-2) 0 var(--space-1); color: var(--color-text-muted); font-size: var(--font-size-sm); }
+
+.types { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: var(--space-4); margin-top: var(--space-6); }
+.type {
+    position: relative;
+    display: flex; align-items: center; gap: var(--space-4);
+    padding: var(--space-4) var(--space-5);
+    border-radius: var(--radius-md);
+    border: 1px solid var(--color-border);
+    text-align: left;
+    transition: border-color var(--transition-base), background var(--transition-base), box-shadow var(--transition-base), transform var(--transition-fast);
+}
+.type:hover { border-color: var(--color-border-strong); background: var(--color-surface-secondary); }
+.type__icon { width: 2.75rem; height: 2.75rem; border-radius: 50%; display: grid; place-items: center; background: var(--color-surface); color: var(--color-text-secondary); flex: none; transition: background var(--transition-base), color var(--transition-base); }
+.type__icon svg { width: 1.4rem; height: 1.4rem; }
+.type strong { display: block; font-weight: 500; line-height: 1.3; }
+.type small { display: block; color: var(--color-text-muted); font-size: var(--font-size-sm); line-height: 1.4; }
+.type.is-active { border-color: var(--ink); background: linear-gradient(165deg, rgba(255, 255, 255, .45), rgba(255, 255, 255, 0) 45%), var(--paper); box-shadow: var(--shadow-sm); }
+.type.is-active .type__icon { background: var(--ink); color: var(--paper); }
+
+/* Wetter */
+.weather { margin-top: var(--space-6); padding-top: var(--space-6); border-top: 1px dashed var(--color-border); }
+.weather__head { display: flex; align-items: baseline; justify-content: space-between; gap: var(--space-4); flex-wrap: wrap; margin-bottom: var(--space-4); }
+.weather__head .label { color: var(--color-text-muted); }
+.weather__src { font-size: var(--font-size-xs); color: var(--color-text-muted); }
+.days { display: flex; gap: var(--space-3); overflow-x: auto; padding-bottom: var(--space-2); scrollbar-width: thin; }
+.day {
+    flex: 0 0 auto; min-width: 5.5rem;
+    display: flex; flex-direction: column; align-items: center; gap: var(--space-1);
+    padding: var(--space-3) var(--space-3);
+    border-radius: var(--radius-md);
+    background: var(--color-surface-secondary);
+    font-size: var(--font-size-sm);
+}
+.day__name { font-size: var(--font-size-xs); color: var(--color-text-muted); font-weight: 500; letter-spacing: .08em; text-transform: uppercase; }
+.day svg { width: 1.9rem; height: 1.9rem; color: var(--color-text-secondary); stroke-width: 1.3; }
+.day__temp { font-weight: 500; }
+.day__temp span { color: var(--color-text-muted); font-weight: 400; }
+.day__rain { font-size: var(--font-size-xs); color: var(--color-info); display: flex; align-items: center; gap: .15rem; }
+.day__rain svg { width: .8rem; height: .8rem; color: inherit; stroke-width: 1.8; }
+.day.is-missing { background: transparent; border: 1px dashed var(--color-border); color: var(--color-text-muted); justify-content: center; }
+.weather__note {
+    display: flex; align-items: center; gap: var(--space-3);
+    padding: var(--space-4) var(--space-5);
+    border-radius: var(--radius-md);
+    background: var(--color-surface-secondary);
+    color: var(--color-text-secondary); font-size: var(--font-size-sm);
+}
+.weather__note svg { color: var(--color-text-muted); }
+.conds { display: flex; flex-wrap: wrap; gap: var(--space-2); margin-top: var(--space-4); }
+.cond {
+    display: inline-flex; align-items: center; gap: var(--space-2);
+    padding: .35rem var(--space-3) .35rem var(--space-2);
+    border-radius: var(--radius-full);
+    background: linear-gradient(165deg, rgba(255, 255, 255, .45), rgba(255, 255, 255, 0) 45%), var(--paper);
+    color: var(--color-text-primary); font-size: var(--font-size-sm);
+}
+.cond svg { width: 1.1rem; height: 1.1rem; color: var(--ink); }
+.cond span { color: var(--color-text-secondary); }
+
+/* ==========================================================
+   Reiter + Werkzeugleiste
+========================================================== */
+
+.main { padding: var(--space-12) 0 calc(var(--space-24) + 2rem); min-height: 50vh; }
+.toolbar {
+    display: flex; align-items: center; justify-content: space-between; gap: var(--space-4); flex-wrap: wrap;
+    padding-bottom: var(--space-5); margin-bottom: var(--space-8);
+    border-bottom: 1px solid var(--color-border);
+}
+.tabs { display: inline-flex; gap: var(--space-1); padding: var(--space-1); border-radius: var(--radius-full); background: var(--color-surface); max-width: 100%; overflow-x: auto; }
+.tab {
+    display: inline-flex; align-items: center; gap: var(--space-2);
+    height: 2.5rem; padding: 0 var(--space-4) 0 var(--space-2);
+    border-radius: var(--radius-full);
+    font-size: var(--font-size-sm); font-weight: 500; color: var(--color-text-secondary); white-space: nowrap;
+    transition: background var(--transition-base), color var(--transition-base), box-shadow var(--transition-base);
+}
+.tab:hover { color: var(--color-text-primary); }
+.tab.is-active { background: var(--color-background); color: var(--color-text-primary); box-shadow: var(--shadow-sm); }
+.tab__avatar { width: 1.85rem; height: 1.85rem; border-radius: 50%; display: grid; place-items: center; background: var(--paper); color: var(--ink); font-size: var(--font-size-xs); font-weight: 700; }
+.tab__avatar svg { width: 1rem; height: 1rem; }
+.tab__count { font-size: var(--font-size-xs); color: var(--color-text-muted); font-weight: 400; }
+.tab__short { display: none; }
+.toolbar__right { display: flex; gap: var(--space-2); }
+
+.summary { display: flex; align-items: flex-end; justify-content: space-between; gap: var(--space-6); margin-bottom: var(--space-8); flex-wrap: wrap; }
+.summary__title { font-size: var(--font-size-2xl); font-weight: 400; letter-spacing: -.02em; line-height: 1.15; }
+.summary__meta { margin-top: var(--space-1); color: var(--color-text-muted); font-size: var(--font-size-sm); }
+.summary__meta strong { color: var(--color-text-primary); font-weight: 500; }
+.progress { width: min(20rem, 100%); }
+.progress__bar { height: .5rem; border-radius: var(--radius-full); background: var(--color-surface); overflow: hidden; }
+.progress__fill { height: 100%; border-radius: inherit; background: var(--color-accent); transition: width var(--transition-slow); }
+.progress__text { display: flex; justify-content: space-between; margin-top: var(--space-2); font-size: var(--font-size-sm); color: var(--color-text-muted); }
+.progress__text strong { color: var(--color-text-primary); font-weight: 500; }
+
+/* ==========================================================
+   Packliste: Kategorien als Post-its
+========================================================== */
+
+.cats { columns: 19rem; column-gap: var(--space-8); }
+.cat {
+    position: relative;
+    break-inside: avoid;
+    margin: 0 0 var(--space-10);
+    padding: var(--space-8) var(--space-5) var(--space-4);
+    background: linear-gradient(165deg, rgba(255, 255, 255, .4), rgba(255, 255, 255, 0) 45%), var(--paper);
+    border-radius: var(--paper-radius);
+    box-shadow: var(--paper-shadow);
+    animation: rise .45s ease both;
+}
+.tape {
+    position: absolute; top: -.6rem; left: 50%; z-index: 2;
+    width: 4.5rem; height: 1.3rem;
+    translate: -50% 0; rotate: -2.5deg;
+    background: rgba(245, 241, 234, .62);
+    border: 1px solid rgba(255, 255, 255, .5);
+    box-shadow: 0 1px 2px rgba(59, 52, 45, .08);
+    backdrop-filter: blur(2px); -webkit-backdrop-filter: blur(2px);
+}
+.cat__head { display: flex; align-items: center; justify-content: space-between; gap: var(--space-3); margin-bottom: var(--space-3); padding: 0 var(--space-1); }
+.cat__title { font-size: var(--font-size-lg); font-weight: 500; letter-spacing: -.015em; line-height: 1.2; }
+.cat__count { min-width: 2.5rem; height: 1.75rem; padding: 0 var(--space-2); display: grid; place-items: center; border-radius: var(--radius-full); background: rgba(255, 255, 255, .5); font-size: var(--font-size-xs); font-weight: 500; color: var(--ink); }
+.cat.is-complete .cat__count { background: var(--ink); color: var(--paper); }
+
+.items { list-style: none; }
+.item {
+    width: 100%;
+    display: grid; grid-template-columns: 1.9rem 2.4rem minmax(0, 1fr); align-items: center; gap: var(--space-2);
+    padding: var(--space-2) var(--space-1);
+    border-radius: var(--radius-sm);
+    text-align: left;
+    transition: background var(--transition-fast);
+}
+.item:hover { background: rgba(255, 255, 255, .35); }
+.items li + li .item { border-top: 1px dashed rgba(59, 52, 45, .12); border-radius: 0; }
+.item__check {
+    width: 1.9rem; height: 1.9rem; border-radius: 50%;
+    display: grid; place-items: center;
+    border: 1.5px solid color-mix(in srgb, var(--ink) 55%, transparent);
+    color: transparent;
+    transition: background var(--transition-fast), border-color var(--transition-fast), color var(--transition-fast), border-radius var(--transition-base);
+}
+.item__check svg { width: 1.1rem; height: 1.1rem; stroke-width: 1.8; }
+.item:hover .item__check { border-color: var(--ink); }
+.item__qty { font-size: var(--font-size-md); font-weight: 500; color: var(--ink); text-align: right; padding-right: var(--space-1); white-space: nowrap; }
+.item__qty small { font-size: var(--font-size-xs); font-weight: 400; opacity: .8; }
+.item__name { line-height: 1.35; overflow-wrap: anywhere; }
+.item__tags { display: flex; flex-wrap: wrap; gap: var(--space-1) var(--space-2); margin-top: .15rem; }
+.tag { display: inline-flex; align-items: center; gap: .25rem; font-size: .6875rem; font-weight: 500; letter-spacing: .08em; text-transform: uppercase; color: var(--ink); opacity: .85; }
+.tag svg { width: .8rem; height: .8rem; stroke-width: 2; }
+.tag.is-maybe { color: var(--color-text-muted); }
+.tag.is-more { color: var(--color-warning); opacity: 1; }
+
+/* Eingepackt: Koffer statt leerem Kreis, Punkt bleibt stehen */
+.item.is-packed .item__check { background: var(--ink); border-color: var(--ink); color: var(--paper); border-radius: .55rem; }
+.item.just-packed .item__check { animation: pop .3s ease; }
+.no-anim .cat, .no-anim .master__cat { animation: none; }
+.item.is-packed .item__name { color: var(--color-text-secondary); }
+.item.is-packed .item__qty { opacity: .55; }
+.item.is-maybe:not(.is-packed) .item__check { border-style: dashed; }
+
+@keyframes pop { 40% { transform: scale(1.18); } }
+
+/* ==========================================================
+   Hauptübersicht (alle Gegenstände)
+========================================================== */
+
+.master { display: grid; gap: var(--space-10); }
+.master__cat { animation: rise .45s ease both; }
+.master__head { display: flex; align-items: center; gap: var(--space-3); padding-bottom: var(--space-3); border-bottom: 1px solid var(--color-border); }
+.master__dot { width: .85rem; height: .85rem; border-radius: 50%; background: var(--paper); box-shadow: inset 0 0 0 1.5px var(--ink); }
+.master__title { font-size: var(--font-size-lg); font-weight: 500; letter-spacing: -.015em; }
+.master__count { color: var(--color-text-muted); font-size: var(--font-size-sm); margin-left: auto; }
+.rows { list-style: none; }
+.row {
+    width: 100%;
+    display: grid; grid-template-columns: minmax(0, 1fr) auto auto; align-items: center; gap: var(--space-5);
+    padding: var(--space-4) var(--space-2);
+    border-bottom: 1px solid var(--color-surface);
+    text-align: left;
+    transition: background var(--transition-fast);
+}
+.row:hover { background: var(--color-surface-secondary); }
+.row__name { font-weight: 500; line-height: 1.35; }
+.row__meta { margin-top: .15rem; font-size: var(--font-size-sm); color: var(--color-text-muted); line-height: 1.45; }
+.row__who { display: flex; gap: var(--space-1); }
+.who { height: 1.6rem; padding: 0 var(--space-2); display: inline-grid; place-items: center; border-radius: var(--radius-full); background: var(--paper); color: var(--ink); font-size: .6875rem; font-weight: 700; letter-spacing: .06em; }
+.row__now { min-width: 5.5rem; text-align: right; font-size: var(--font-size-sm); color: var(--color-text-secondary); white-space: nowrap; }
+.row__now strong { font-size: var(--font-size-md); font-weight: 500; color: var(--color-text-primary); }
+.row__now.is-off { color: var(--color-text-muted); font-style: italic; }
+.row__edit { color: var(--color-text-muted); }
+
+.empty {
+    display: flex; flex-direction: column; align-items: center; text-align: center;
+    padding: var(--space-16) var(--space-6);
+    border: 1.5px dashed var(--color-border);
+    border-radius: var(--radius-xl);
+    background: var(--color-surface-secondary);
+}
+.empty__title { font-size: var(--font-size-2xl); font-weight: 400; letter-spacing: -.02em; margin-bottom: var(--space-3); }
+.empty__text { max-width: 28rem; color: var(--color-text-secondary); margin-bottom: var(--space-6); }
+
+/* ==========================================================
+   Plus-Knopf
+========================================================== */
+
+.fab {
+    position: fixed; z-index: 30;
+    right: max(var(--space-8), env(safe-area-inset-right));
+    bottom: max(var(--space-8), env(safe-area-inset-bottom));
+    display: inline-flex; align-items: center; gap: var(--space-3);
+    height: 3.75rem; padding: 0 var(--space-6) 0 var(--space-4);
+    border-radius: var(--radius-full);
+    background: var(--color-primary); color: var(--color-text-inverse);
+    box-shadow: 0 10px 30px rgba(86, 59, 47, .35);
+    font-size: var(--font-size-sm); font-weight: 500; letter-spacing: .12em; text-transform: uppercase;
+    transition: background var(--transition-base), transform var(--transition-base), box-shadow var(--transition-base);
+}
+.fab:hover { background: var(--color-primary-dark); transform: translateY(-2px); box-shadow: 0 14px 36px rgba(86, 59, 47, .42); }
+.fab__plus { width: 2.25rem; height: 2.25rem; border-radius: 50%; display: grid; place-items: center; background: rgba(245, 241, 234, .16); transition: transform var(--transition-base); }
+.fab:hover .fab__plus { transform: rotate(90deg); }
+.fab svg { width: 1.35rem; height: 1.35rem; stroke-width: 1.8; }
+
+/* ==========================================================
+   Popups
+========================================================== */
+
+.modal { position: fixed; inset: 0; z-index: 40; display: grid; place-items: center; padding: var(--space-6); overflow-y: auto; }
+.modal__backdrop { position: fixed; inset: 0; background: rgba(28, 23, 19, .42); backdrop-filter: blur(5px); -webkit-backdrop-filter: blur(5px); opacity: 0; transition: opacity var(--transition-base); }
+.modal.is-open .modal__backdrop { opacity: 1; }
+.sheet {
+    position: relative;
+    width: min(34rem, 100%);
+    padding: var(--space-10) var(--space-8) var(--space-6);
+    background: linear-gradient(165deg, rgba(255, 255, 255, .45), rgba(255, 255, 255, 0) 45%), var(--paper);
+    border-radius: .3rem .3rem 1.6rem .3rem;
+    box-shadow: 0 2px 3px rgba(59, 52, 45, .08), 0 40px 70px -20px rgba(28, 23, 19, .5);
+    opacity: 0;
+    transform: translateY(24px) rotate(-3deg) scale(.94);
+    transition: transform .35s cubic-bezier(.2, .9, .25, 1.1), opacity var(--transition-base);
+}
+.modal.is-open .sheet { opacity: 1; transform: rotate(-.5deg); }
+.sheet .tape { width: 6rem; height: 1.6rem; top: -.75rem; }
+.sheet__close { position: absolute; top: var(--space-3); right: var(--space-3); color: var(--color-text-secondary); }
+.sheet__close:hover { background: rgba(255, 255, 255, .45); color: var(--color-text-primary); }
+.sheet__name {
+    width: 100%;
+    padding: 0 0 var(--space-2);
+    border: 0; border-bottom: 1.5px solid rgba(59, 52, 45, .16);
+    background: transparent;
+    font-size: var(--font-size-xl); font-weight: 500; letter-spacing: -.02em;
+    transition: border-color var(--transition-base);
+}
+.sheet__name::placeholder { color: rgba(59, 52, 45, .4); }
+.sheet__name:focus { outline: none; border-color: var(--ink); }
+.sheet__group { margin-top: var(--space-5); }
+.sheet__group > .label { display: block; color: var(--color-text-secondary); margin-bottom: var(--space-2); }
+.sheet__group > .label em { font-style: normal; text-transform: none; letter-spacing: 0; color: var(--color-text-muted); font-weight: 400; font-size: var(--font-size-xs); }
+.chips { display: flex; flex-wrap: wrap; gap: var(--space-2); }
+.chip {
+    display: inline-flex; align-items: center; gap: var(--space-2);
+    padding: .35rem var(--space-3);
+    border-radius: var(--radius-full);
+    background: rgba(255, 255, 255, .45);
+    border: 1px solid rgba(59, 52, 45, .1);
+    font-size: var(--font-size-sm); color: var(--color-text-secondary);
+    transition: background var(--transition-fast), color var(--transition-fast), border-color var(--transition-fast);
+}
+.chip svg { width: 1rem; height: 1rem; }
+.chip:hover { background: rgba(255, 255, 255, .75); color: var(--color-text-primary); }
+.chip.is-active { background: var(--color-text-primary); border-color: var(--color-text-primary); color: var(--color-text-inverse); }
+.soft-input {
+    height: 2.5rem; padding: 0 var(--space-3);
+    border-radius: var(--radius-sm);
+    border: 1px solid rgba(59, 52, 45, .14);
+    background: rgba(255, 255, 255, .5);
+    transition: border-color var(--transition-fast), background var(--transition-fast);
+}
+.soft-input:focus { outline: none; border-color: var(--ink); background: rgba(255, 255, 255, .8); }
+.soft-input--wide { width: 100%; }
+.rules { display: grid; gap: var(--space-2); }
+.rule { display: grid; grid-template-columns: 7.5rem 4.5rem minmax(0, 1fr); align-items: center; gap: var(--space-2); }
+.rule__name { font-size: var(--font-size-sm); color: var(--color-text-secondary); }
+.rule__name strong { font-weight: 500; color: var(--color-text-primary); }
+.rule input { width: 100%; text-align: center; }
+.rule input:disabled { opacity: .35; }
+.rule select { width: 100%; }
+.preview-line { margin-top: var(--space-3); padding: var(--space-3) var(--space-4); border-radius: var(--radius-sm); background: rgba(255, 255, 255, .45); font-size: var(--font-size-sm); color: var(--color-text-secondary); }
+.preview-line strong { color: var(--color-text-primary); font-weight: 500; }
+.sheet__foot { display: flex; align-items: center; gap: var(--space-4); margin-top: var(--space-6); padding-top: var(--space-5); border-top: 1px dashed rgba(59, 52, 45, .18); }
+.sheet__foot .btn:last-child { margin-left: auto; }
+.link-danger { font-size: var(--font-size-sm); color: var(--color-danger); opacity: .85; }
+.link-danger:hover { opacity: 1; text-decoration: underline; text-underline-offset: 3px; }
+.sheet__title { font-size: var(--font-size-xl); font-weight: 500; letter-spacing: -.02em; margin-bottom: var(--space-2); }
+.sheet__text { color: var(--color-text-secondary); }
+.choice { display: grid; gap: var(--space-3); margin-top: var(--space-6); }
+.choice button {
+    display: flex; align-items: flex-start; gap: var(--space-4); text-align: left;
+    padding: var(--space-4) var(--space-5);
+    border-radius: var(--radius-md);
+    background: rgba(255, 255, 255, .5); border: 1px solid rgba(59, 52, 45, .1);
+    transition: background var(--transition-fast), border-color var(--transition-fast);
+}
+.choice button:hover { background: rgba(255, 255, 255, .85); border-color: var(--ink); }
+.choice svg { margin-top: .15rem; color: var(--ink); }
+.choice strong { display: block; font-weight: 500; }
+.choice span { display: block; font-size: var(--font-size-sm); color: var(--color-text-secondary); }
+
+/* ==========================================================
+   Anmeldung (wie Explorer und Notizen)
+========================================================== */
+
+.lock {
+    position: fixed; inset: 0; z-index: 60;
+    display: grid; place-items: center;
+    padding: calc(var(--space-6) + env(safe-area-inset-top)) var(--space-6) calc(var(--space-6) + env(safe-area-inset-bottom));
+    color: var(--color-text-inverse);
+    background:
+        radial-gradient(ellipse 38rem 30rem at 50% 45%, rgba(28, 23, 19, .55), rgba(28, 23, 19, 0) 70%),
+        linear-gradient(0deg, rgba(28, 23, 19, .6), rgba(28, 23, 19, .3) 60%, rgba(28, 23, 19, .5)),
+        url("assets/images/hero-mobil.jpg") center 40% / cover no-repeat,
+        #2c2620;
+    transition: opacity var(--transition-slow), visibility var(--transition-slow);
+}
+.lock.is-leaving { opacity: 0; visibility: hidden; }
+.lock__inner { width: 100%; max-width: 26rem; text-align: center; }
+.lock .logo { width: 4.5rem; height: 4.5rem; margin: 0 auto var(--space-8); }
+.lock__label { opacity: .85; margin-bottom: var(--space-4); }
+.lock__title { font-size: clamp(2.5rem, 7vw, var(--font-size-5xl)); font-weight: 400; line-height: 1.05; letter-spacing: -.035em; margin-bottom: var(--space-4); }
+.lock__text { opacity: .85; margin-bottom: var(--space-10); }
+.lock__form { display: flex; flex-direction: column; gap: var(--space-3); }
+.lock__field { position: relative; }
+.lock__field svg { position: absolute; left: var(--space-4); top: 50%; translate: 0 -50%; opacity: .7; }
+.lock__input {
+    width: 100%; height: 3.25rem;
+    padding: 0 var(--space-4) 0 3rem;
+    border-radius: var(--radius-sm);
+    border: 1px solid rgba(245, 241, 234, .35);
+    background: rgba(245, 241, 234, .12);
+    backdrop-filter: blur(12px); -webkit-backdrop-filter: blur(12px);
+    color: var(--color-text-inverse);
+    transition: border-color var(--transition-base), background var(--transition-base);
+}
+.lock__input::placeholder { color: rgba(245, 241, 234, .65); }
+.lock__input:focus { outline: none; border-color: rgba(245, 241, 234, .8); background: rgba(245, 241, 234, .18); }
+.btn--light { height: 3.25rem; background: var(--color-background); color: var(--color-text-primary); }
+.btn--light:hover { background: #fff; box-shadow: var(--shadow-md); }
+.lock__hint { margin-top: var(--space-6); font-size: var(--font-size-xs); opacity: .6; }
+.lock.is-checking .lock__inner { opacity: 0; }
+.lock__inner { transition: opacity var(--transition-base); }
+.lock__form.is-error { animation: shake .4s ease; }
+.lock__form.is-error .lock__input { border-color: #e09a9a; }
+.btn[disabled] { opacity: .7; cursor: progress; }
+.lock__remember {
+    display: flex; align-items: center; justify-content: center; gap: var(--space-2);
+    margin-top: var(--space-2);
+    font-size: var(--font-size-sm); opacity: .85; cursor: pointer; user-select: none;
+}
+.lock__remember input {
+    appearance: none; -webkit-appearance: none;
+    width: 1.1rem; height: 1.1rem; margin: 0;
+    border-radius: var(--radius-xs);
+    border: 1px solid rgba(245, 241, 234, .55);
+    background: rgba(245, 241, 234, .1);
+    display: grid; place-items: center; cursor: pointer;
+    transition: background var(--transition-fast), border-color var(--transition-fast);
+}
+.lock__remember input::after {
+    content: ""; width: .3rem; height: .55rem; margin-top: -2px;
+    border: solid var(--color-text-primary); border-width: 0 2px 2px 0;
+    transform: rotate(45deg) scale(0); transition: transform var(--transition-fast);
+}
+.lock__remember input:checked { background: var(--color-background); border-color: var(--color-background); }
+.lock__remember input:checked::after { transform: rotate(45deg) scale(1); }
+.lock__error { min-height: 1.4em; margin-top: var(--space-4); font-size: var(--font-size-sm); color: #f0b4b4; }
+@keyframes shake { 20%, 60% { transform: translateX(-6px); } 40%, 80% { transform: translateX(6px); } }
+.loading { padding: var(--space-20) 0; text-align: center; color: var(--color-text-muted); font-size: var(--font-size-sm); }
+.loading::before { content: ""; display: block; width: 1.5rem; height: 1.5rem; margin: 0 auto var(--space-4); border-radius: 50%; border: 2px solid var(--color-border); border-top-color: var(--color-primary); animation: spin .8s linear infinite; }
+
+/* Hinweis unten */
+.toast {
+    position: fixed; z-index: 50; left: 50%; bottom: max(var(--space-8), env(safe-area-inset-bottom));
+    display: flex; align-items: center; gap: var(--space-5);
+    padding: var(--space-3) var(--space-3) var(--space-3) var(--space-5);
+    border-radius: var(--radius-full);
+    background: var(--color-text-primary); color: var(--color-text-inverse);
+    box-shadow: var(--shadow-xl);
+    font-size: var(--font-size-sm);
+    translate: -50% 150%; opacity: 0;
+    transition: translate .35s cubic-bezier(.2, .9, .25, 1.1), opacity var(--transition-base);
+}
+.toast.is-visible { translate: -50% 0; opacity: 1; }
+.toast button { padding: var(--space-2) var(--space-4); border-radius: var(--radius-full); background: rgba(245, 241, 234, .14); font-weight: 500; letter-spacing: .1em; text-transform: uppercase; font-size: var(--font-size-xs); }
+.toast button:hover { background: rgba(245, 241, 234, .24); }
+
+.footer { border-top: 1px solid var(--color-border); padding: var(--space-8) 0 calc(var(--space-8) + 4rem); color: var(--color-text-muted); font-size: var(--font-size-sm); }
+.footer__inner { display: flex; justify-content: space-between; align-items: center; gap: var(--space-4); flex-wrap: wrap; }
+.footer button { color: inherit; text-decoration: underline; text-underline-offset: 3px; }
+.footer button:hover { color: var(--color-text-primary); }
+
+@keyframes rise { from { opacity: 0; transform: translateY(12px); } }
+@keyframes spin { to { rotate: 360deg; } }
+.spinner { width: 1.1rem; height: 1.1rem; border-radius: 50%; border: 2px solid var(--color-border); border-top-color: var(--color-primary); animation: spin .8s linear infinite; flex: none; }
+
+/* ==========================================================
+   Responsive
+========================================================== */
+
+@media (max-width: 900px) {
+    .trip__grid { grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); }
+    .trip__place { grid-column: 1 / -1; }
+    .types { grid-template-columns: minmax(0, 1fr); gap: var(--space-2); }
+}
+@media (max-width: 640px) {
+    .container { padding: 0 var(--space-4); }
+    .hero { padding-bottom: calc(var(--space-12) + 1.5rem); }
+    .hero__bar { height: 4.5rem; }
+    .hero__domain .sync__text { display: none; }
+    .logo { width: 2.5rem; height: 2.5rem; }
+    .hero__content { padding-top: var(--space-4); gap: var(--space-6); }
+    .hero__stats { gap: var(--space-6); width: 100%; }
+    .stat__value { font-size: var(--font-size-xl); }
+    .trip { margin-top: calc(-1 * var(--space-10)); padding: var(--space-5); border-radius: var(--radius-lg); }
+    .trip__grid { gap: var(--space-4); }
+    .type { padding: var(--space-3) var(--space-4); }
+    .type__icon { width: 2.25rem; height: 2.25rem; }
+    .main { padding-top: var(--space-8); }
+    .toolbar { margin-bottom: var(--space-6); }
+    .toolbar { flex-wrap: nowrap; gap: var(--space-2); }
+    .tabs { flex: 1; min-width: 0; }
+    .tab__long { display: none; }
+    .tab__short { display: inline; }
+    .tab { flex: 1; justify-content: center; padding: 0 var(--space-3) 0 var(--space-2); }
+    .tab__count { display: none; }
+    .toolbar__right .btn { width: 3rem; height: 3rem; padding: 0; border-radius: var(--radius-full); }
+    .btn__text { display: none; }
+    .summary__title { font-size: var(--font-size-xl); }
+    .cats { columns: 1; }
+    .cat { margin-bottom: var(--space-8); }
+    .row { grid-template-columns: minmax(0, 1fr) auto; gap: var(--space-3); }
+    .row__who { grid-column: 1; grid-row: 2; }
+    .row__now { grid-column: 2; grid-row: 1 / span 2; min-width: 0; }
+    .row__edit { display: none; }
+    .fab { right: var(--space-5); bottom: max(var(--space-5), env(safe-area-inset-bottom)); width: 4rem; height: 4rem; padding: 0; justify-content: center; }
+    .fab__label { display: none; }
+    .fab__plus { background: none; }
+    .fab svg { width: 1.6rem; height: 1.6rem; }
+    .modal { place-items: start center; padding: calc(var(--space-8) + env(safe-area-inset-top)) var(--space-3) var(--space-6); }
+    .sheet { padding: var(--space-8) var(--space-5) var(--space-5); }
+    .rule { grid-template-columns: 6rem 3.75rem minmax(0, 1fr); }
+    .toast { bottom: calc(max(var(--space-5), env(safe-area-inset-bottom)) + 5rem); width: max-content; max-width: calc(100% - 2rem); }
+}
+@media (prefers-reduced-motion: reduce) {
+    *, *::before, *::after { animation: none !important; transition: none !important; }
+}
+</style>
+</head>
+<body class="is-locked">
+
+<svg width="0" height="0" style="position:absolute" aria-hidden="true">
+    <symbol id="i-lock" viewBox="0 0 24 24"><rect x="4.5" y="10.5" width="15" height="10" rx="2"/><path d="M8 10.5V7.5a4 4 0 0 1 8 0v3"/></symbol>
+    <symbol id="i-plus" viewBox="0 0 24 24"><path d="M12 5v14M5 12h14"/></symbol>
+    <symbol id="i-minus" viewBox="0 0 24 24"><path d="M5 12h14"/></symbol>
+    <symbol id="i-x" viewBox="0 0 24 24"><path d="M6 6l12 12M18 6 6 18"/></symbol>
+    <symbol id="i-pin" viewBox="0 0 24 24"><path d="M12 21s-6.5-5.6-6.5-11a6.5 6.5 0 0 1 13 0c0 5.4-6.5 11-6.5 11z"/><circle cx="12" cy="10" r="2.3"/></symbol>
+    <symbol id="i-suitcase" viewBox="0 0 24 24"><rect x="3.5" y="7.5" width="17" height="12" rx="2.2"/><path d="M9 7.5V5.8A1.3 1.3 0 0 1 10.3 4.5h3.4A1.3 1.3 0 0 1 15 5.8v1.7"/><path d="M8 7.5v12M16 7.5v12"/></symbol>
+    <symbol id="i-list" viewBox="0 0 24 24"><path d="M9 6.5h11M9 12h11M9 17.5h11"/><circle cx="4.75" cy="6.5" r=".9"/><circle cx="4.75" cy="12" r=".9"/><circle cx="4.75" cy="17.5" r=".9"/></symbol>
+    <symbol id="i-reset" viewBox="0 0 24 24"><path d="M4.5 12a7.5 7.5 0 1 0 2.2-5.3"/><path d="M4.5 4.5v3.7h3.7"/></symbol>
+    <symbol id="i-edit" viewBox="0 0 24 24"><path d="M14.5 5.5l4 4L8 20H4v-4z"/></symbol>
+    <symbol id="i-city" viewBox="0 0 24 24"><path d="M3.5 20.5h17"/><path d="M5.5 20.5V10l4-2.5v13"/><path d="M9.5 20.5V5l5-1.5v17"/><path d="M14.5 20.5V11h4v9.5"/><path d="M12 8h.01M12 11h.01M12 14h.01M7.5 13h.01M7.5 16h.01M16.5 14h.01M16.5 17h.01"/></symbol>
+    <symbol id="i-spa" viewBox="0 0 24 24"><path d="M12 19c-4 0-7-2.6-7.5-6.5 2.6 0 5 1 6.3 2.7"/><path d="M12 19c4 0 7-2.6 7.5-6.5-2.6 0-5 1-6.3 2.7"/><path d="M12 19c-2-1.8-3-4-3-6.5 0-2.3 1.2-4.6 3-6 1.8 1.4 3 3.7 3 6 0 2.5-1 4.7-3 6.5z"/></symbol>
+    <symbol id="i-beach" viewBox="0 0 24 24"><circle cx="17" cy="7" r="2.6"/><path d="M17 2.5v.6M17 10.9v.6M12.5 7h.6M20.9 7h.6M13.8 3.8l.4.4M19.8 9.8l.4.4M13.8 10.2l.4-.4M19.8 4.2l.4-.4"/><path d="M2.5 15.5c1.6 0 1.6-1.2 3.2-1.2s1.6 1.2 3.2 1.2 1.6-1.2 3.2-1.2 1.6 1.2 3.2 1.2 1.6-1.2 3.2-1.2 1.6 1.2 3 1.2"/><path d="M2.5 19.5c1.6 0 1.6-1.2 3.2-1.2s1.6 1.2 3.2 1.2 1.6-1.2 3.2-1.2 1.6 1.2 3.2 1.2 1.6-1.2 3.2-1.2 1.6 1.2 3 1.2"/></symbol>
+    <symbol id="w-sun" viewBox="0 0 24 24"><circle cx="12" cy="12" r="4"/><path d="M12 3v1.6M12 19.4V21M3 12h1.6M19.4 12H21M5.6 5.6l1.1 1.1M17.3 17.3l1.1 1.1M5.6 18.4l1.1-1.1M17.3 6.7l1.1-1.1"/></symbol>
+    <symbol id="w-partly" viewBox="0 0 24 24"><path d="M8.5 4.2v1.2M3.7 9h1.2M5.1 5.6l.8.8M11.9 5.6l-.8.8"/><path d="M5.8 11.6a3.2 3.2 0 1 1 5.6-3"/><path d="M8 19.5h9a3.5 3.5 0 0 0 .3-7 4.8 4.8 0 0 0-9.1 1.1A3 3 0 0 0 8 19.5z"/></symbol>
+    <symbol id="w-cloud" viewBox="0 0 24 24"><path d="M7 18.5h10.5a4 4 0 0 0 .4-8 5.6 5.6 0 0 0-10.7 1.4A3.3 3.3 0 0 0 7 18.5z"/></symbol>
+    <symbol id="w-fog" viewBox="0 0 24 24"><path d="M7 13.5h10.5a3.6 3.6 0 0 0 .4-7.2 5.3 5.3 0 0 0-10.2 1.3A3 3 0 0 0 7 13.5z"/><path d="M4.5 17h15M7 20.5h10"/></symbol>
+    <symbol id="w-rain" viewBox="0 0 24 24"><path d="M7 14.5h10.5a3.8 3.8 0 0 0 .4-7.6 5.4 5.4 0 0 0-10.4 1.4A3.1 3.1 0 0 0 7 14.5z"/><path d="M8.5 17.5l-1 2.5M12.5 17.5l-1 2.5M16.5 17.5l-1 2.5"/></symbol>
+    <symbol id="w-snow" viewBox="0 0 24 24"><path d="M7 14h10.5a3.8 3.8 0 0 0 .4-7.6 5.4 5.4 0 0 0-10.4 1.4A3.1 3.1 0 0 0 7 14z"/><path d="M8.5 18h.01M12 20h.01M15.5 18h.01M10.2 21h.01M13.8 17h.01"/></symbol>
+    <symbol id="w-storm" viewBox="0 0 24 24"><path d="M7 14h10.5a3.8 3.8 0 0 0 .4-7.6 5.4 5.4 0 0 0-10.4 1.4A3.1 3.1 0 0 0 7 14z"/><path d="m12.5 14-2 3.5h3l-2 3.5"/></symbol>
+    <symbol id="w-drop" viewBox="0 0 24 24"><path d="M12 3.5s6 6.4 6 10.5a6 6 0 0 1-12 0c0-4.1 6-10.5 6-10.5z"/></symbol>
+    <symbol id="w-warm" viewBox="0 0 24 24"><path d="M10 14.8V5.5a2 2 0 0 1 4 0v9.3a4 4 0 1 1-4 0z"/><path d="M12 10v6.5"/></symbol>
+    <symbol id="w-cold" viewBox="0 0 24 24"><path d="M12 3v18M4.2 7.5l15.6 9M4.2 16.5l15.6-9"/><path d="m9.5 4.5 2.5 2 2.5-2M9.5 19.5l2.5-2 2.5 2"/></symbol>
+    <symbol id="i-calendar" viewBox="0 0 24 24"><rect x="3.5" y="5" width="17" height="15.5" rx="2"/><path d="M3.5 10h17M8 3v4M16 3v4"/></symbol>
+</svg>
+
+<!-- Anmeldung -->
+<section class="lock is-checking" id="lock" aria-label="Anmeldung">
+    <div class="lock__inner">
+        <div class="logo" aria-label="Bergliacht"></div>
+        <p class="label lock__label">Packliste</p>
+        <h1 class="lock__title">Bereit zum Packen?</h1>
+        <p class="lock__text">Eure Packliste ist geschützt.<br>Gib dein Passwort ein, um fortzufahren.</p>
+        <form class="lock__form" id="lockForm" autocomplete="off">
+            <div class="lock__field">
+                <svg class="icon"><use href="#i-lock"/></svg>
+                <input class="lock__input" id="lockInput" type="password" placeholder="Passwort" aria-label="Passwort" autocomplete="current-password">
+            </div>
+            <button class="btn btn--light" id="lockButton" type="submit">Entsperren</button>
+            <label class="lock__remember"><input type="checkbox" id="lockRemember" checked> Auf diesem Gerät angemeldet bleiben</label>
+        </form>
+        <p class="lock__error" id="lockError" role="alert"></p>
+        <p class="lock__hint" id="lockHint" hidden>Lokale Vorschau ohne Zugang: Jedes Passwort öffnet die Seite, gespeichert wird nur in diesem Browser.</p>
+    </div>
+</section>
+
+<header class="hero">
+    <div class="container hero__bar">
+        <div class="hero__domain">
+            <span class="sync" id="sync" role="status"><span class="sync__dot"></span><span class="sync__text" id="syncText">packliste.bergliacht.at</span></span>
+        </div>
+        <a href="./" class="logo" aria-label="Packliste, Startseite"></a>
+        <div class="hero__actions">
+            <button class="icon-btn" id="lockBtn" aria-label="Abmelden" title="Abmelden"><svg class="icon"><use href="#i-lock"/></svg></button>
+        </div>
+    </div>
+    <div class="container hero__content">
+        <div>
+            <p class="label hero__label" id="heroLabel">Packliste</p>
+            <h1 class="hero__title" id="heroTitle">Wohin geht's?</h1>
+        </div>
+        <div class="hero__stats">
+            <div><div class="stat__value" id="statDays">–</div><div class="label stat__label">Dauer</div></div>
+            <div><div class="stat__value" id="statPacked">0 / 0</div><div class="label stat__label">Eingepackt</div></div>
+            <div><div class="stat__value" id="statTemp">–</div><div class="label stat__label">Wetter</div></div>
+        </div>
+    </div>
+</header>
+
+<div class="container">
+    <section class="trip" aria-label="Reise">
+        <div class="trip__grid">
+            <div class="trip__place">
+                <label class="label field__label" for="ort">Urlaubsort</label>
+                <div class="place">
+                    <svg class="icon"><use href="#i-pin"/></svg>
+                    <input class="input" id="ort" placeholder="z. B. Lissabon" autocomplete="off" enterkeyhint="search" role="combobox" aria-expanded="false" aria-controls="suggest">
+                    <ul class="suggest" id="suggest" hidden></ul>
+                </div>
+                <p class="field__hint" id="ortHint"></p>
+            </div>
+            <div>
+                <label class="label field__label" for="start">Abreise</label>
+                <input class="input" type="date" id="start">
+                <p class="field__hint" id="dateHint"></p>
+            </div>
+            <div>
+                <label class="label field__label" for="tage">Dauer</label>
+                <div class="stepper">
+                    <button type="button" id="tageMinus" aria-label="Einen Tag weniger"><svg class="icon"><use href="#i-minus"/></svg></button>
+                    <input id="tage" type="number" min="1" max="60" inputmode="numeric" aria-label="Urlaubsdauer in Tagen">
+                    <span id="tageWort">Tage</span>
+                    <button type="button" id="tagePlus" aria-label="Einen Tag mehr"><svg class="icon"><use href="#i-plus"/></svg></button>
+                </div>
+            </div>
+        </div>
+
+        <div class="types" id="types" role="radiogroup" aria-label="Urlaubstyp"></div>
+
+        <div class="weather" id="weather"></div>
+    </section>
+</div>
+
+<main class="main">
+    <div class="container">
+        <div class="toolbar">
+            <nav class="tabs" id="tabs" aria-label="Ansicht"></nav>
+            <div class="toolbar__right">
+                <button class="btn btn--line" id="resetBtn"><svg class="icon"><use href="#i-reset"/></svg><span class="btn__text">Liste zurücksetzen</span></button>
+            </div>
+        </div>
+        <div id="view"></div>
+    </div>
+</main>
+
+<footer class="footer">
+    <div class="container footer__inner">
+        <span id="footerInfo">Packliste · Bergliacht · Wetter von Open-Meteo</span>
+        <button id="logout">Abmelden</button>
+    </div>
+</footer>
+
+<button class="fab" id="fab" aria-label="Neuer Gegenstand">
+    <span class="fab__plus"><svg class="icon"><use href="#i-plus"/></svg></span>
+    <span class="fab__label">Gegenstand</span>
+</button>
+
+<!-- Gegenstand bearbeiten -->
+<div class="modal" id="editModal" hidden>
+    <div class="modal__backdrop" data-close></div>
+    <form class="sheet p-sand" id="editor" autocomplete="off" role="dialog" aria-modal="true" aria-label="Gegenstand">
+        <span class="tape"></span>
+        <button type="button" class="icon-btn sheet__close" data-close aria-label="Schließen"><svg class="icon"><use href="#i-x"/></svg></button>
+        <input class="sheet__name" id="fName" placeholder="Gegenstand, z. B. Unterhosen" maxlength="50" required>
+
+        <div class="sheet__group">
+            <span class="label">Kategorie</span>
+            <div class="chips" id="fKatChips"></div>
+            <input class="soft-input soft-input--wide" id="fKat" placeholder="oder neue Kategorie eingeben" maxlength="30" style="margin-top: var(--space-2)">
+        </div>
+
+        <div class="sheet__group">
+            <span class="label">Für wen</span>
+            <div class="chips" id="fFuer"></div>
+        </div>
+
+        <div class="sheet__group">
+            <span class="label">Bei welchem Urlaub <em>· keiner gewählt = immer</em></span>
+            <div class="chips" id="fTypen"></div>
+        </div>
+
+        <div class="sheet__group">
+            <span class="label">Wetter</span>
+            <div class="chips" id="fWetter"></div>
+        </div>
+
+        <div class="sheet__group">
+            <span class="label">Menge</span>
+            <div class="rules" id="fRules"></div>
+            <div class="rule" style="margin-top: var(--space-2)">
+                <span class="rule__name">Höchstens</span>
+                <input class="soft-input" id="fMax" type="number" min="1" inputmode="numeric" placeholder="–" aria-label="Höchstens">
+                <span class="rule__name">Stück (z. B. weil man wäscht)</span>
+            </div>
+            <p class="preview-line" id="fPreview"></p>
+        </div>
+
+        <div class="sheet__foot">
+            <button type="button" class="link-danger" id="fDelete">Löschen</button>
+            <button class="btn btn--dark" type="submit">Speichern</button>
+        </div>
+    </form>
+</div>
+
+<!-- Zurücksetzen -->
+<div class="modal" id="resetModal" hidden>
+    <div class="modal__backdrop" data-close></div>
+    <div class="sheet p-ton" role="dialog" aria-modal="true" aria-label="Liste zurücksetzen">
+        <span class="tape"></span>
+        <button type="button" class="icon-btn sheet__close" data-close aria-label="Schließen"><svg class="icon"><use href="#i-x"/></svg></button>
+        <h2 class="sheet__title">Liste zurücksetzen?</h2>
+        <p class="sheet__text">Die Gegenstände in der Hauptübersicht bleiben in jedem Fall erhalten.</p>
+        <div class="choice">
+            <button type="button" id="resetChecks">
+                <svg class="icon"><use href="#i-suitcase"/></svg>
+                <div><strong>Nur Häkchen entfernen</strong><span>Alles wieder auspacken, Reise bleibt eingestellt.</span></div>
+            </button>
+            <button type="button" id="resetAll">
+                <svg class="icon"><use href="#i-reset"/></svg>
+                <div><strong>Neue Reise beginnen</strong><span>Häkchen, Ort, Datum und Urlaubstyp zurücksetzen.</span></div>
+            </button>
+        </div>
+    </div>
+</div>
+
+<div class="toast" id="toast" role="status"><span id="toastText"></span><button id="toastUndo" hidden>Rückgängig</button></div>
+
+<script>
+"use strict";
+
+/* ==========================================================
+   Grunddaten
+========================================================== */
+
+const SPEICHER = "bergliacht-packliste";                 // Zwischenspeicher im Browser (schneller Start, offline)
+const KEY_STORE = "bergliacht-packliste-schluessel";    // gemerkter Schlüssel bei „angemeldet bleiben“
+
+const PERSONEN = [
+    { id: "patrick", name: "Patrick", kurz: "P", farbe: "p-fels" },
+    { id: "emma",    name: "Emma",    kurz: "E", farbe: "p-ton" },
+];
+
+const TYPEN = {
+    stadt:    { name: "Städtetrip",     kurz: "Städtetrip", text: "Kultur, viel zu Fuß", icon: "i-city",  farbe: "p-fels" },
+    wellness: { name: "Wellnessurlaub", kurz: "Wellness",   text: "Sauna, Pool, Ruhe",    icon: "i-spa",   farbe: "p-salbei" },
+    strand:   { name: "Strandurlaub",   kurz: "Strand",     text: "Sonne, Meer, Sand",    icon: "i-beach", farbe: "p-sand" },
+};
+
+const WETTER = {
+    immer: { name: "Immer" },
+    regen: { name: "Bei Regen",  grund: "Regen",  icon: "w-rain", text: "Regen möglich" },
+    warm:  { name: "Bei Wärme",  grund: "Wärme",  icon: "w-warm", text: "Warm" },
+    kalt:  { name: "Bei Kälte",  grund: "Kälte",  icon: "w-cold", text: "Kalt" },
+    sonne: { name: "Bei Sonne",  grund: "Sonne",  icon: "w-sun",  text: "Sonnig, hoher UV-Index" },
+};
+
+const FUER = {
+    beide:     { name: "Beide" },
+    patrick:   { name: "Nur Patrick" },
+    emma:      { name: "Nur Emma" },
+    gemeinsam: { name: "Gemeinsam (einmal)" },
+};
+
+const ARTEN = { stk: "Stück", tag: "pro Tag", tage: "alle X Tage" };
+const PAPIER = ["p-sand", "p-salbei", "p-ton", "p-fels", "p-leinen"];
+
+/* Startliste: Menge als [Art, Wert], Abweichungen je Urlaubstyp */
+function startListe() {
+    let n = 0;
+    const g = (name, kat, fuer, o = {}) => ({
+        id: "s" + (++n), name, kat, fuer,
+        typen: o.typen || [],
+        wetter: o.wetter || "immer",
+        menge: Object.fromEntries(Object.entries({ standard: o.m || ["stk", 1], ...(o.je || {}) }).map(([k, [art, wert]]) => [k, { art, wert }])),
+        max: o.max || null,
+    });
+    return [
+        g("Unterhosen", "Kleidung", "beide", { m: ["tag", 1], je: { wellness: ["tag", 2] } }),
+        g("Socken", "Kleidung", "beide", { m: ["tag", 1], je: { strand: ["stk", 2] } }),
+        g("T-Shirts", "Kleidung", "beide", { m: ["tag", 1], max: 7 }),
+        g("Lange Hosen", "Kleidung", "beide", { m: ["tage", 3], je: { strand: ["stk", 1] } }),
+        g("Kurze Hosen", "Kleidung", "beide", { m: ["tage", 2], wetter: "warm" }),
+        g("Pullover", "Kleidung", "beide"),
+        g("Warme Jacke", "Kleidung", "beide", { wetter: "kalt" }),
+        g("Haube & Handschuhe", "Kleidung", "beide", { wetter: "kalt" }),
+        g("Regenjacke", "Kleidung", "beide", { wetter: "regen" }),
+        g("Pyjama", "Kleidung", "beide"),
+        g("Bequeme Schuhe", "Kleidung", "beide", { typen: ["stadt"] }),
+        g("Badeschlapfen", "Kleidung", "beide", { typen: ["wellness", "strand"] }),
+        g("Bademantel", "Kleidung", "beide", { typen: ["wellness"] }),
+        g("Sonnenbrille", "Kleidung", "beide", { wetter: "sonne" }),
+        g("Kappe / Sonnenhut", "Kleidung", "beide", { typen: ["strand"] }),
+
+        g("Badehose", "Baden & Strand", "patrick", { typen: ["wellness", "strand"], m: ["stk", 2] }),
+        g("Bikini", "Baden & Strand", "emma", { typen: ["wellness", "strand"], m: ["stk", 2] }),
+        g("Strandtuch", "Baden & Strand", "beide", { typen: ["strand"] }),
+        g("Badetasche", "Baden & Strand", "gemeinsam", { typen: ["wellness", "strand"] }),
+        g("Sonnencreme", "Baden & Strand", "gemeinsam", { wetter: "sonne" }),
+        g("After-Sun", "Baden & Strand", "gemeinsam", { typen: ["strand"] }),
+        g("Buch / E-Reader", "Baden & Strand", "beide", { typen: ["wellness", "strand"] }),
+
+        g("Zahnbürste", "Hygiene", "beide"),
+        g("Zahnpasta", "Hygiene", "gemeinsam"),
+        g("Deo", "Hygiene", "beide"),
+        g("Duschgel & Shampoo", "Hygiene", "gemeinsam"),
+        g("Haarbürste", "Hygiene", "beide"),
+        g("Rasierer", "Hygiene", "patrick"),
+
+        g("Reisepass / Ausweis", "Dokumente & Geld", "beide"),
+        g("E-Card", "Dokumente & Geld", "beide"),
+        g("Geldbörse", "Dokumente & Geld", "beide"),
+        g("Buchungsbestätigung", "Dokumente & Geld", "gemeinsam"),
+
+        g("Handy-Ladegerät", "Technik", "beide"),
+        g("Kopfhörer", "Technik", "beide"),
+        g("Powerbank", "Technik", "gemeinsam", { typen: ["stadt"] }),
+
+        g("Schmerztabletten", "Reiseapotheke", "gemeinsam"),
+        g("Pflaster", "Reiseapotheke", "gemeinsam"),
+        g("Mückenspray", "Reiseapotheke", "gemeinsam", { wetter: "warm" }),
+
+        g("Tagesrucksack", "Unterwegs", "gemeinsam", { typen: ["stadt"] }),
+        g("Regenschirm", "Unterwegs", "gemeinsam", { wetter: "regen" }),
+        g("Trinkflasche", "Unterwegs", "beide"),
+    ];
+}
+
+function neueReise() {
+    return { ort: null, start: isoDatum(tagePlus(heute(), 5)), tage: 3, typ: "stadt" };
+}
+
+/* ==========================================================
+   Zustand + Speichern
+========================================================== */
+
+/* Aufbau der Daten (auch in packliste.json auf GitHub):
+   reise        Ort, Datum, Dauer, Typ + updated
+   items        Gegenstände der Hauptübersicht, jeder mit updated
+   geloescht    id -> Zeitpunkt, damit das Löschen auf allen Geräten ankommt
+   gepackt      "patrick:id" / "emma:id" / "g:id" -> { n: eingepackte Stück, t: Zeitpunkt }
+   zurueckgesetzt  Zeitpunkt von „Liste zurücksetzen“: ältere Häkchen gelten nicht mehr */
+
+const DAY = 864e5;
+let state = leererStand();
+let ansicht = "patrick";
+let wetter = { status: "leer" };
+let remote = null;      // { token, repo, file } nach dem Entsperren; null = lokale Vorschau
+let sha = null;         // Stand der Datei auf GitHub
+let dirty = false;      // Änderungen, die noch nicht auf GitHub sind
+let changes = 0;        // zählt Änderungen, um welche während des Hochladens zu erkennen
+let started = false;
+
+function leererStand() {
+    return { reise: { ...neueReise(), updated: 0 }, items: startListe().map((i) => ({ ...i, updated: 0 })), geloescht: {}, gepackt: {}, zurueckgesetzt: 0 };
+}
+function normiere(s) {
+    const l = leererStand();
+    return {
+        reise: s.reise || l.reise,
+        items: Array.isArray(s.items) ? s.items : l.items,
+        geloescht: s.geloescht || {},
+        gepackt: s.gepackt || {},
+        zurueckgesetzt: s.zurueckgesetzt || 0,
+    };
+}
+
+function schreibeCache() {
+    try { localStorage.setItem(SPEICHER, JSON.stringify({ state, sha, dirty })); } catch (e) {}
+}
+function leseCache() {
+    try {
+        const c = JSON.parse(localStorage.getItem(SPEICHER));
+        if (c && c.state) { state = normiere(c.state); sha = c.sha || null; dirty = !!c.dirty; return true; }
+    } catch (e) {}
+    return false;
+}
+
+/* Status oben links */
+function setStatus(art, text) {
+    const el = $("#sync");
+    el.className = "sync" + (art ? " is-" + art : "");
+    el.title = text;
+    $("#syncText").textContent = text;
+    clearTimeout(setStatus.t);
+}
+function zeigeGespeichert() {
+    setStatus("", "Gespeichert");
+    setStatus.t = setTimeout(() => setStatus("", "packliste.bergliacht.at"), 2600);
+}
+
+// Jede Änderung landet sofort im Browser und kurz danach auf GitHub
+function speichern() {
+    dirty = true; changes++; schreibeCache();
+    if (!remote) return;
+    setStatus("saving", "Speichert …");
+    clearTimeout(speichern.t);
+    speichern.t = setTimeout(sync, 800);
+}
+
+/* ---------- GitHub: privates Repo mit einer Datei packliste.json ---------- */
+
+const b64encode = (s) => {
+    const b = new TextEncoder().encode(s); let out = "";
+    for (let i = 0; i < b.length; i += 0x8000) out += String.fromCharCode(...b.subarray(i, i + 0x8000));
+    return btoa(out);
+};
+const b64decode = (s) => new TextDecoder().decode(Uint8Array.from(atob(s.replace(/\s/g, "")), (c) => c.charCodeAt(0)));
+
+async function api(method, body) {
+    const res = await fetch(`https://api.github.com/repos/${remote.repo}/contents/${remote.file}`, {
+        method, cache: "no-store",
+        headers: {
+            Authorization: `Bearer ${remote.token}`,
+            Accept: "application/vnd.github+json",
+            "X-GitHub-Api-Version": "2022-11-28",
+            ...(body ? { "Content-Type": "application/json" } : {}),
+        },
+        body: body ? JSON.stringify(body) : undefined,
+    });
+    if (res.status === 404 && method === "GET") return null;   // Datei gibt es noch nicht
+    if (!res.ok) { const err = new Error("GitHub " + res.status); err.status = res.status; throw err; }
+    return res.json();
+}
+async function pull() {
+    const res = await api("GET");
+    if (!res) return { state: null, sha: null };
+    return { state: normiere(JSON.parse(b64decode(res.content) || "{}")), sha: res.sha };
+}
+
+// Zwei Stände zusammenführen: pro Gegenstand, pro Häkchen und für die Reise gewinnt die jüngere Fassung
+function merge(a, b) {
+    const geloescht = { ...a.geloescht };
+    for (const [id, t] of Object.entries(b.geloescht)) geloescht[id] = Math.max(geloescht[id] || 0, t);
+    const grenze = Date.now() - 90 * DAY;
+    for (const id of Object.keys(geloescht)) if (geloescht[id] < grenze) delete geloescht[id];
+
+    const nachId = new Map();
+    for (const i of [...a.items, ...b.items]) { const o = nachId.get(i.id); if (!o || (i.updated || 0) > (o.updated || 0)) nachId.set(i.id, i); }
+    const reihenfolge = [...new Set([...a.items.map((i) => i.id), ...b.items.map((i) => i.id)])];
+    const items = reihenfolge.map((id) => nachId.get(id)).filter((i) => !(geloescht[i.id] >= (i.updated || 0)));
+
+    const zurueckgesetzt = Math.max(a.zurueckgesetzt, b.zurueckgesetzt);
+    const gepackt = {};
+    for (const [k, v] of [...Object.entries(a.gepackt), ...Object.entries(b.gepackt)]) {
+        if (v.t <= zurueckgesetzt) continue;
+        if (!gepackt[k] || v.t > gepackt[k].t) gepackt[k] = v;
+    }
+    const reise = (b.reise.updated || 0) > (a.reise.updated || 0) ? b.reise : a.reise;
+    return { reise, items, geloescht, gepackt, zurueckgesetzt };
+}
+
+function reiseSchluessel(r) { return r.ort ? `${r.ort.lat},${r.ort.lon},${r.start},${r.tage}` : `-,${r.start},${r.tage}`; }
+function uebernimm(neu) {
+    const alt = reiseSchluessel(state.reise);
+    state = neu;
+    schreibeCache();
+    if ($("#editModal").hidden) renderAlles();
+    if (reiseSchluessel(state.reise) !== alt) ladeWetter();
+}
+
+async function runSync() {
+    if (!dirty) {
+        const r = await pull();
+        if (r.sha !== sha) { sha = r.sha; if (r.state) uebernimm(r.state); }
+        return false;
+    }
+    for (let versuch = 0; versuch < 4; versuch++) {
+        const anfang = changes;
+        const content = b64encode(JSON.stringify({ version: 1, ...state }, null, 2));
+        try {
+            const res = await api("PUT", { message: "Packliste aktualisiert", content, ...(sha ? { sha } : {}) });
+            sha = res.content.sha;
+            dirty = changes !== anfang;
+            schreibeCache();
+            return true;
+        } catch (err) {
+            // Ein anderes Gerät war schneller: dessen Stand holen, zusammenführen, nochmal
+            if (err.status !== 409 && err.status !== 422) throw err;
+            const r = await pull();
+            sha = r.sha;
+            if (r.state) uebernimm(merge(state, r.state));
+        }
+    }
+    throw new Error("Zu viele gleichzeitige Änderungen");
+}
+
+let busy = false, again = false;
+async function sync() {
+    if (!remote) return;
+    if (busy) { again = true; return; }
+    busy = true;
+    clearTimeout(speichern.t);
+    try {
+        let hochgeladen = false;
+        do { again = false; hochgeladen = (await runSync()) || hochgeladen; } while (again || dirty);
+        if (hochgeladen) zeigeGespeichert();
+        else if (/Offline|Nicht|Zugang/.test($("#syncText").textContent)) setStatus("", "packliste.bergliacht.at");
+    } catch (err) {
+        if (err.status === 401 || err.status === 403 || err.status === 404) {
+            const bekannt = $("#syncText").textContent === "Zugang ungültig";
+            setStatus("error", "Zugang ungültig");
+            if (!bekannt) toast("GitHub lehnt den Zugang ab. Token prüfen (siehe README).");
+        } else if (err instanceof TypeError) {
+            setStatus("offline", dirty ? "Offline · wird nachgeholt" : "Offline");
+        } else {
+            setStatus("error", "Nicht gespeichert · antippen");
+        }
+    } finally {
+        busy = false;
+    }
+}
+
+window.addEventListener("online", sync);
+// Beim Zurückkehren zur App den Stand vom anderen Handy holen, beim Verlassen sofort hochladen
+document.addEventListener("visibilitychange", () => { if (started) sync(); });
+setInterval(() => { if (started && document.visibilityState === "visible") sync(); }, 60000);
+
+/* ==========================================================
+   Hilfen
+========================================================== */
+
+const $ = (s) => document.querySelector(s);
+const esc = (s) => String(s).replace(/[&<>"']/g, (c) => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;" }[c]));
+const icon = (id, cls = "icon") => `<svg class="${cls}"><use href="#${id}"/></svg>`;
+function heute() { const d = new Date(); d.setHours(0, 0, 0, 0); return d; }
+function tagePlus(d, n) { const x = new Date(d); x.setDate(x.getDate() + n); return x; }
+function isoDatum(d) { return `${d.getFullYear()}-${String(d.getMonth() + 1).padStart(2, "0")}-${String(d.getDate()).padStart(2, "0")}`; }
+function ausIso(s) { const [y, m, d] = s.split("-").map(Number); return new Date(y, m - 1, d); }
+const WT = ["So", "Mo", "Di", "Mi", "Do", "Fr", "Sa"];
+function kurzDatum(d) { return `${WT[d.getDay()]} ${d.getDate()}.${d.getMonth() + 1}.`; }
+function zahl(n) { return String(n).replace(".", ","); }
+
+/* ==========================================================
+   Wetter (Open-Meteo, nur echte Vorhersage, max. 16 Tage)
+========================================================== */
+
+const VORHERSAGE_TAGE = 16;
+let wetterLauf = 0;
+
+function wetterIcon(code) {
+    if (code <= 1) return "w-sun";
+    if (code === 2) return "w-partly";
+    if (code === 3) return "w-cloud";
+    if (code === 45 || code === 48) return "w-fog";
+    if ((code >= 71 && code <= 77) || code === 85 || code === 86) return "w-snow";
+    if (code >= 95) return "w-storm";
+    return "w-rain";
+}
+
+async function ladeWetter() {
+    const lauf = ++wetterLauf;
+    const r = state.reise;
+    if (!r.ort) { wetter = { status: "leer" }; return renderAlles(); }
+
+    const start = ausIso(r.start), ende = tagePlus(start, r.tage - 1);
+    const erster = heute(), letzter = tagePlus(erster, VORHERSAGE_TAGE - 1);
+    if (ende < erster) { wetter = { status: "vorbei" }; return renderAlles(); }
+    if (start > letzter) { wetter = { status: "zufrueh", ab: tagePlus(start, -(VORHERSAGE_TAGE - 1)) }; return renderAlles(); }
+
+    const von = start < erster ? erster : start, bis = ende > letzter ? letzter : ende;
+    wetter = { status: "laedt" };
+    renderWetter();
+    try {
+        const url = "https://api.open-meteo.com/v1/forecast?" + new URLSearchParams({
+            latitude: r.ort.lat, longitude: r.ort.lon, timezone: "auto",
+            daily: "weather_code,temperature_2m_max,temperature_2m_min,precipitation_probability_max,precipitation_sum,uv_index_max",
+            start_date: isoDatum(von), end_date: isoDatum(bis),
+        });
+        const res = await fetch(url);
+        if (!res.ok) throw new Error(res.status);
+        const j = await res.json();
+        if (lauf !== wetterLauf) return;
+        const d = j.daily;
+        const tage = d.time.map((t, i) => ({
+            datum: ausIso(t), code: d.weather_code[i],
+            max: Math.round(d.temperature_2m_max[i]), min: Math.round(d.temperature_2m_min[i]),
+            regen: d.precipitation_probability_max[i] ?? 0, mm: d.precipitation_sum[i] ?? 0, uv: d.uv_index_max[i] ?? 0,
+        }));
+        wetter = { status: "ok", tage, fehlen: ende > letzter ? Math.round((ende - letzter) / 864e5) : 0, ab: tagePlus(start, -(VORHERSAGE_TAGE - 1)) };
+    } catch (e) {
+        if (lauf !== wetterLauf) return;
+        wetter = { status: "fehler" };
+    }
+    renderAlles();
+}
+
+/* Welche Wetterbedingungen gelten? null = noch unbekannt */
+function bedingungen() {
+    if (wetter.status !== "ok" || !wetter.tage.length) return null;
+    const t = wetter.tage;
+    const schnittMax = t.reduce((s, d) => s + d.max, 0) / t.length;
+    return {
+        regen: t.some((d) => d.regen >= 50 || d.mm >= 2),
+        warm: schnittMax >= 22,
+        kalt: Math.min(...t.map((d) => d.min)) <= 5 || schnittMax < 12,
+        sonne: t.some((d) => d.uv >= 5 || (d.code <= 1 && d.max >= 20)),
+    };
+}
+
+/* ==========================================================
+   Mengen + Sichtbarkeit
+========================================================== */
+
+function regelFuer(item, typ) { return item.menge[typ] || item.menge.standard; }
+
+function menge(item, typ = state.reise.typ, tage = state.reise.tage) {
+    const r = regelFuer(item, typ);
+    let n = r.art === "stk" ? r.wert : r.art === "tag" ? Math.ceil(r.wert * tage - 1e-9) : Math.ceil(tage / r.wert);
+    if (item.max) n = Math.min(n, item.max);
+    return Math.max(0, n);
+}
+
+function regelText(r) {
+    if (r.art === "stk") return `${zahl(r.wert)} Stück`;
+    if (r.art === "tag") return `${zahl(r.wert)} pro Tag`;
+    return r.wert === 1 ? "1 pro Tag" : `1 alle ${zahl(r.wert)} Tage`;
+}
+
+/* "ja" = kommt mit, "vielleicht" = hängt vom noch unbekannten Wetter ab, null = nicht dabei */
+function status(item, b = bedingungen()) {
+    if (item.typen.length && !item.typen.includes(state.reise.typ)) return null;
+    if (menge(item) <= 0) return null;
+    if (item.wetter === "immer") return "ja";
+    if (!b) return "vielleicht";
+    return b[item.wetter] ? "ja" : null;
+}
+
+function kategorien() {
+    const k = [];
+    state.items.forEach((i) => { if (!k.includes(i.kat)) k.push(i.kat); });
+    return k;
+}
+const papier = (kat) => PAPIER[kategorien().indexOf(kat) % PAPIER.length];
+
+function schluessel(item, person) { return item.fuer === "gemeinsam" ? "g:" + item.id : person + ":" + item.id; }
+
+function listeFuer(person) {
+    const b = bedingungen();
+    return state.items
+        .filter((i) => i.fuer === "beide" || i.fuer === "gemeinsam" || i.fuer === person)
+        .map((i) => ({ item: i, st: status(i, b), key: schluessel(i, person) }))
+        .filter((e) => e.st);
+}
+
+/* Gespeichert wird die eingepackte Stückzahl: steigt die Menge später (z. B. längere Reise), fehlt der Rest */
+function eingepackt(key) { const g = state.gepackt[key]; return g && g.t > state.zurueckgesetzt ? g.n : 0; }
+function istGepackt(e) { const n = eingepackt(e.key); return n > 0 && n >= menge(e.item); }
+
+function zaehle(person) {
+    const l = listeFuer(person);
+    return { fertig: l.filter((e) => istGepackt(e)).length, gesamt: l.length };
+}
+
+/* ==========================================================
+   Darstellung
+========================================================== */
+
+function renderAlles() {
+    renderHero();
+    renderReise();
+    renderWetter();
+    renderTabs();
+    renderView();
+}
+
+function renderHero() {
+    const r = state.reise;
+    $("#heroLabel").textContent = "Packliste · " + TYPEN[r.typ].name;
+    $("#heroTitle").textContent = r.ort ? r.ort.name + "." : "Wohin geht's?";
+    $("#statDays").textContent = r.tage + (r.tage === 1 ? " Tag" : " Tage");
+    const keys = new Set();
+    let fertig = 0;
+    PERSONEN.forEach((p) => listeFuer(p.id).forEach((e) => { if (!keys.has(e.key)) { keys.add(e.key); if (istGepackt(e)) fertig++; } }));
+    $("#statPacked").textContent = `${fertig} / ${keys.size}`;
+    if (wetter.status === "ok") {
+        const t = wetter.tage;
+        $("#statTemp").textContent = `${Math.min(...t.map((d) => d.min))}–${Math.max(...t.map((d) => d.max))}°`;
+    } else $("#statTemp").textContent = "–";
+}
+
+function renderReise() {
+    const r = state.reise;
+    const ort = $("#ort");
+    if (document.activeElement !== ort) ort.value = r.ort ? r.ort.name : "";
+    $("#ortHint").textContent = r.ort ? [r.ort.region, r.ort.land].filter(Boolean).join(", ") : "Ort eingeben und aus der Liste wählen";
+    $("#start").value = r.start;
+    const start = ausIso(r.start);
+    $("#dateHint").textContent = r.tage > 1 ? `${kurzDatum(start)} bis ${kurzDatum(tagePlus(start, r.tage - 1))}` : kurzDatum(start);
+    if (document.activeElement !== $("#tage")) $("#tage").value = r.tage;
+    $("#tageWort").textContent = r.tage === 1 ? "Tag" : "Tage";
+
+    $("#types").innerHTML = Object.entries(TYPEN).map(([id, t]) => `
+        <button type="button" class="type ${t.farbe} ${r.typ === id ? "is-active" : ""}" role="radio" aria-checked="${r.typ === id}" data-typ="${id}">
+            <span class="type__icon">${icon(t.icon)}</span>
+            <span><strong>${t.name}</strong><small>${t.text}</small></span>
+        </button>`).join("");
+}
+
+function renderWetter() {
+    const el = $("#weather");
+    const r = state.reise;
+    let inhalt = "";
+    const kopf = (rechts = "") => `<div class="weather__head"><span class="label">Wetter${r.ort ? " in " + esc(r.ort.name) : ""}</span><span class="weather__src">${rechts}</span></div>`;
+    const hinweis = (ic, text) => `<div class="weather__note">${ic}<span>${text}</span></div>`;
+
+    if (wetter.status === "leer") inhalt = kopf() + hinweis(icon("i-pin"), "Gib einen Urlaubsort ein, dann wird die Liste ans Wetter angepasst. Bis dahin sind wetterabhängige Sachen mit „falls …“ markiert.");
+    else if (wetter.status === "laedt") inhalt = kopf() + hinweis('<span class="spinner"></span>', "Vorhersage wird geladen …");
+    else if (wetter.status === "fehler") inhalt = kopf() + hinweis(icon("w-cloud"), "Die Vorhersage konnte gerade nicht geladen werden. Wetterabhängige Sachen sind mit „falls …“ markiert.");
+    else if (wetter.status === "vorbei") inhalt = kopf() + hinweis(icon("i-calendar"), "Diese Reise liegt in der Vergangenheit. Für eine neue Reise die Liste zurücksetzen.");
+    else if (wetter.status === "zufrueh") inhalt = kopf() + hinweis(icon("i-calendar"), `Die Vorhersage gibt es ab <strong>${kurzDatum(wetter.ab)}</strong> (gut zwei Wochen vor der Reise). Dann passt sich die Liste automatisch an. Bis dahin sind wetterabhängige Sachen mit „falls …“ markiert.`);
+    else {
+        const tage = wetter.tage.map((d) => `
+            <div class="day">
+                <span class="day__name">${kurzDatum(d.datum)}</span>
+                ${icon(wetterIcon(d.code))}
+                <span class="day__temp">${d.max}° <span>${d.min}°</span></span>
+                <span class="day__rain">${icon("w-drop")}${d.regen} %</span>
+            </div>`).join("");
+        const fehlt = wetter.fehlen ? `<div class="day is-missing"><span class="day__name">+${wetter.fehlen} ${wetter.fehlen === 1 ? "Tag" : "Tage"}</span><small>noch keine<br>Vorhersage</small></div>` : "";
+        const b = bedingungen();
+        const dazu = (w) => state.items.filter((i) => i.wetter === w && status(i, b)).map((i) => i.name);
+        const conds = Object.keys(b).filter((k) => b[k]).map((k) => {
+            const liste = dazu(k);
+            return `<span class="cond ${k === "regen" ? "p-fels" : k === "kalt" ? "p-fels" : k === "warm" ? "p-ton" : "p-sand"}">${icon(WETTER[k].icon)}${WETTER[k].text}${liste.length ? `<span>· ${esc(liste.join(", "))}</span>` : ""}</span>`;
+        }).join("");
+        inhalt = kopf("Vorhersage von Open-Meteo") + `<div class="days">${tage}${fehlt}</div>` +
+            `<div class="conds">${conds || `<span class="cond p-leinen">${icon("w-partly")}Mildes Wetter<span>· keine Extras nötig</span></span>`}</div>`;
+    }
+    el.innerHTML = inhalt;
+}
+
+function renderTabs() {
+    const tabs = PERSONEN.map((p) => {
+        const z = zaehle(p.id);
+        return `<button class="tab ${p.farbe} ${ansicht === p.id ? "is-active" : ""}" data-view="${p.id}"><span class="tab__avatar">${p.kurz}</span>${p.name}<span class="tab__count">${z.fertig}/${z.gesamt}</span></button>`;
+    });
+    tabs.push(`<button class="tab p-leinen ${ansicht === "alle" ? "is-active" : ""}" data-view="alle"><span class="tab__avatar">${icon("i-list")}</span><span class="tab__long">Hauptübersicht</span><span class="tab__short">Alle</span></button>`);
+    $("#tabs").innerHTML = tabs.join("");
+}
+
+let geradeGepackt = null;
+function renderView(anim = true) {
+    $("#view").classList.toggle("no-anim", !anim);
+    $("#view").innerHTML = ansicht === "alle" ? viewAlle() : viewPerson(ansicht);
+}
+
+function viewPerson(pid) {
+    const p = PERSONEN.find((x) => x.id === pid);
+    const liste = listeFuer(pid);
+    const z = zaehle(pid);
+    const prozent = z.gesamt ? Math.round((z.fertig / z.gesamt) * 100) : 0;
+    const andere = PERSONEN.find((x) => x.id !== pid);
+    const kopf = `
+        <div class="summary">
+            <div>
+                <h2 class="summary__title">${z.fertig === z.gesamt && z.gesamt ? `Alles eingepackt, ${p.name}!` : `${p.name}s Koffer`}</h2>
+                <p class="summary__meta"><strong>${z.gesamt - z.fertig}</strong> noch einzupacken · Gemeinsames teilt sich ${p.name} mit ${andere.name}</p>
+            </div>
+            <div class="progress">
+                <div class="progress__bar"><div class="progress__fill" style="width:${prozent}%"></div></div>
+                <div class="progress__text"><span>Eingepackt</span><strong>${prozent} %</strong></div>
+            </div>
+        </div>`;
+    if (!liste.length) return kopf + `<div class="empty"><h3 class="empty__title">Noch nichts auf der Liste.</h3><p class="empty__text">Lege in der Hauptübersicht Gegenstände an.</p></div>`;
+
+    const cats = kategorien().map((kat, ki) => {
+        const eintraege = liste.filter((e) => e.item.kat === kat);
+        if (!eintraege.length) return "";
+        const fertig = eintraege.filter((e) => istGepackt(e)).length;
+        return `
+        <section class="cat ${papier(kat)} ${fertig === eintraege.length ? "is-complete" : ""}" style="rotate:${[-0.6, 0.5, -0.3, 0.7, -0.5][ki % 5]}deg; animation-delay:${ki * 40}ms">
+            <span class="tape"></span>
+            <div class="cat__head"><h3 class="cat__title">${esc(kat)}</h3><span class="cat__count">${fertig}/${eintraege.length}</span></div>
+            <ul class="items">${eintraege.map((e) => itemZeile(e)).join("")}</ul>
+        </section>`;
+    }).join("");
+    return kopf + `<div class="cats">${cats}</div>`;
+}
+
+function itemZeile({ item, st, key }) {
+    const gepackt = istGepackt({ item, key }), teil = eingepackt(key);
+    const tags = [];
+    if (!gepackt && teil > 0) tags.push(`<span class="tag is-more">${icon("i-suitcase")}${teil} eingepackt · noch ${menge(item) - teil} dazu</span>`);
+    if (item.fuer === "gemeinsam") tags.push(`<span class="tag">Gemeinsam</span>`);
+    if (item.wetter !== "immer") {
+        const w = WETTER[item.wetter];
+        tags.push(st === "vielleicht"
+            ? `<span class="tag is-maybe">${icon(w.icon)}falls ${w.grund}</span>`
+            : `<span class="tag">${icon(w.icon)}wegen ${w.grund}</span>`);
+    }
+    return `<li><button class="item ${gepackt ? "is-packed" : ""} ${key === geradeGepackt ? "just-packed" : ""} ${st === "vielleicht" ? "is-maybe" : ""}" data-key="${key}" aria-pressed="${gepackt}">
+        <span class="item__check">${icon("i-suitcase")}</span>
+        <span class="item__qty">${menge(item)}<small>×</small></span>
+        <span><span class="item__name">${esc(item.name)}</span>${tags.length ? `<span class="item__tags">${tags.join("")}</span>` : ""}</span>
+    </button></li>`;
+}
+
+function beschreibung(item) {
+    const teile = [regelText(item.menge.standard)];
+    Object.keys(TYPEN).forEach((t) => { if (item.menge[t]) teile.push(`${TYPEN[t].kurz}: ${regelText(item.menge[t])}`); });
+    if (item.max) teile.push(`höchstens ${item.max}`);
+    let s = teile.join(", ");
+    if (item.typen.length) s += " · nur " + item.typen.map((t) => TYPEN[t].kurz).join(" & ");
+    if (item.wetter !== "immer") s += " · " + WETTER[item.wetter].name.replace("Bei", "bei");
+    return s;
+}
+
+function viewAlle() {
+    const b = bedingungen();
+    const kopf = `
+        <div class="summary">
+            <div>
+                <h2 class="summary__title">Alle Gegenstände</h2>
+                <p class="summary__meta"><strong>${state.items.length}</strong> Gegenstände in ${kategorien().length} Kategorien · antippen zum Bearbeiten</p>
+            </div>
+        </div>`;
+    if (!state.items.length) return kopf + `<div class="empty"><h3 class="empty__title">Noch leer.</h3><p class="empty__text">Lege den ersten Gegenstand mit dem Plus an.</p></div>`;
+    const cats = kategorien().map((kat, ki) => {
+        const items = state.items.filter((i) => i.kat === kat);
+        return `
+        <section class="master__cat ${papier(kat)}" style="animation-delay:${ki * 40}ms">
+            <div class="master__head"><span class="master__dot"></span><h3 class="master__title">${esc(kat)}</h3><span class="master__count">${items.length}</span></div>
+            <ul class="rows">${items.map((i) => {
+                const st = status(i, b);
+                const who = i.fuer === "beide" ? PERSONEN.map((p) => `<span class="who ${p.farbe}">${p.kurz}</span>`).join("")
+                    : i.fuer === "gemeinsam" ? `<span class="who p-leinen">P + E</span>`
+                    : `<span class="who ${PERSONEN.find((p) => p.id === i.fuer).farbe}">${PERSONEN.find((p) => p.id === i.fuer).kurz}</span>`;
+                const jetzt = st ? `<strong>${menge(i)}×</strong>${st === "vielleicht" ? " falls" : ""}` : "nicht dabei";
+                return `<li><button class="row" data-edit="${i.id}">
+                    <span><span class="row__name">${esc(i.name)}</span><span class="row__meta" style="display:block">${esc(beschreibung(i))}</span></span>
+                    <span class="row__who">${who}</span>
+                    <span class="row__now ${st ? "" : "is-off"}">${jetzt}</span>
+                </button></li>`;
+            }).join("")}</ul>
+        </section>`;
+    }).join("");
+    return kopf + `<div class="master">${cats}</div>`;
+}
+
+/* ==========================================================
+   Reise bearbeiten
+========================================================== */
+
+function setzeReise(teil) {
+    Object.assign(state.reise, teil, { updated: Date.now() });
+    speichern();
+    renderAlles();
+    if ("ort" in teil || "start" in teil || "tage" in teil) ladeWetter();
+}
+
+$("#types").addEventListener("click", (e) => {
+    const b = e.target.closest("[data-typ]");
+    if (b) setzeReise({ typ: b.dataset.typ });
+});
+$("#start").addEventListener("change", (e) => { if (e.target.value) setzeReise({ start: e.target.value }); });
+function setzeTage(n) { n = Math.max(1, Math.min(60, Math.round(n) || 1)); if (n !== state.reise.tage) setzeReise({ tage: n }); else renderReise(); }
+$("#tageMinus").addEventListener("click", () => setzeTage(state.reise.tage - 1));
+$("#tagePlus").addEventListener("click", () => setzeTage(state.reise.tage + 1));
+$("#tage").addEventListener("change", (e) => setzeTage(+e.target.value));
+
+/* Ortssuche */
+let suchTimer, treffer = [], aktiv = -1, suchLauf = 0;
+const ortEl = $("#ort"), suggestEl = $("#suggest");
+function zeigeTreffer() {
+    suggestEl.hidden = false;
+    ortEl.setAttribute("aria-expanded", "true");
+    suggestEl.innerHTML = treffer.length
+        ? treffer.map((t, i) => `<li><button type="button" data-i="${i}" class="${i === aktiv ? "is-active" : ""}"><span>${esc(t.name)}</span><small>${esc([t.region, t.land].filter(Boolean).join(", "))}</small></button></li>`).join("")
+        : `<li class="is-empty">Kein Ort gefunden</li>`;
+}
+function versteckeTreffer() { suggestEl.hidden = true; ortEl.setAttribute("aria-expanded", "false"); aktiv = -1; }
+ortEl.addEventListener("input", () => {
+    clearTimeout(suchTimer);
+    const q = ortEl.value.trim();
+    if (q.length < 2) { treffer = []; return versteckeTreffer(); }
+    suchTimer = setTimeout(async () => {
+        const lauf = ++suchLauf;
+        try {
+            const res = await fetch("https://geocoding-api.open-meteo.com/v1/search?" + new URLSearchParams({ name: q, count: 6, language: "de", format: "json" }));
+            const j = await res.json();
+            if (lauf !== suchLauf) return;
+            treffer = (j.results || []).map((r) => ({ name: r.name, region: r.admin1 && r.admin1 !== r.name ? r.admin1 : "", land: r.country || "", lat: r.latitude, lon: r.longitude }));
+            aktiv = treffer.length ? 0 : -1;
+            zeigeTreffer();
+        } catch (e) { treffer = []; versteckeTreffer(); }
+    }, 250);
+});
+function waehle(i) {
+    const t = treffer[i];
+    if (!t) return;
+    versteckeTreffer();
+    ortEl.blur();
+    setzeReise({ ort: t });
+}
+suggestEl.addEventListener("mousedown", (e) => { const b = e.target.closest("[data-i]"); if (b) { e.preventDefault(); waehle(+b.dataset.i); } });
+ortEl.addEventListener("keydown", (e) => {
+    if (suggestEl.hidden) return;
+    if (e.key === "ArrowDown" || e.key === "ArrowUp") { e.preventDefault(); aktiv = (aktiv + (e.key === "ArrowDown" ? 1 : -1) + treffer.length) % treffer.length; zeigeTreffer(); }
+    else if (e.key === "Enter") { e.preventDefault(); waehle(Math.max(0, aktiv)); }
+    else if (e.key === "Escape") versteckeTreffer();
+});
+ortEl.addEventListener("blur", () => setTimeout(() => { versteckeTreffer(); renderReise(); }, 150));
+
+/* ==========================================================
+   Abhaken + Reiter
+========================================================== */
+
+$("#tabs").addEventListener("click", (e) => {
+    const b = e.target.closest("[data-view]");
+    if (!b) return;
+    ansicht = b.dataset.view;
+    renderTabs(); renderView();
+});
+
+$("#view").addEventListener("click", (e) => {
+    const it = e.target.closest("[data-key]");
+    if (it) {
+        const k = it.dataset.key;
+        const item = state.items.find((i) => i.id === k.split(":")[1]);
+        const weg = istGepackt({ item, key: k });
+        state.gepackt[k] = { n: weg ? 0 : menge(item), t: Date.now() };
+        geradeGepackt = weg ? null : k;
+        speichern();
+        renderHero(); renderTabs(); renderView(false);
+        geradeGepackt = null;
+        return;
+    }
+    const ed = e.target.closest("[data-edit]");
+    if (ed) oeffneEditor(state.items.find((i) => i.id === ed.dataset.edit));
+});
+
+/* ==========================================================
+   Popups
+========================================================== */
+
+function oeffne(m) { m.hidden = false; requestAnimationFrame(() => m.classList.add("is-open")); }
+function schliesse(m) { m.classList.remove("is-open"); setTimeout(() => { m.hidden = true; }, 250); }
+document.querySelectorAll(".modal").forEach((m) => m.addEventListener("click", (e) => { if (e.target.closest("[data-close]")) schliesse(m); }));
+document.addEventListener("keydown", (e) => { if (e.key === "Escape") document.querySelectorAll(".modal.is-open").forEach(schliesse); });
+
+/* Gegenstand bearbeiten */
+let entwurf = null, bearbeitet = null;
+
+function oeffneEditor(item) {
+    bearbeitet = item || null;
+    entwurf = item ? JSON.parse(JSON.stringify(item)) : {
+        id: "", name: "", kat: kategorien()[0] || "Kleidung",
+        fuer: ansicht === "patrick" || ansicht === "emma" ? ansicht : "beide",
+        typen: [], wetter: "immer", menge: { standard: { art: "stk", wert: 1 } }, max: null,
+    };
+    $("#fName").value = entwurf.name;
+    $("#fKat").value = "";
+    $("#fMax").value = entwurf.max || "";
+    $("#fDelete").hidden = !item;
+    $("#editor").className = "sheet " + (papier(entwurf.kat) || "p-sand");
+    renderEditor();
+    oeffne($("#editModal"));
+    if (!item) setTimeout(() => $("#fName").focus(), 60);
+}
+
+function renderEditor() {
+    const e = entwurf;
+    $("#fKatChips").innerHTML = kategorien().map((k) => `<button type="button" class="chip ${e.kat === k ? "is-active" : ""}" data-kat="${esc(k)}">${esc(k)}</button>`).join("");
+    $("#fFuer").innerHTML = Object.entries(FUER).map(([id, f]) => `<button type="button" class="chip ${e.fuer === id ? "is-active" : ""}" data-fuer="${id}">${f.name}</button>`).join("");
+    $("#fTypen").innerHTML = Object.entries(TYPEN).map(([id, t]) => `<button type="button" class="chip ${e.typen.includes(id) ? "is-active" : ""}" data-typen="${id}">${icon(t.icon)}${t.kurz}</button>`).join("");
+    $("#fWetter").innerHTML = Object.entries(WETTER).map(([id, w]) => `<button type="button" class="chip ${e.wetter === id ? "is-active" : ""}" data-wetter="${id}">${w.icon ? icon(w.icon) : ""}${w.name}</button>`).join("");
+
+    const zeile = (key, name) => {
+        const r = e.menge[key];
+        const gleich = key !== "standard" && !r;
+        const opts = (key === "standard" ? "" : `<option value="gleich" ${gleich ? "selected" : ""}>wie Standard</option>`) +
+            Object.entries(ARTEN).map(([a, n]) => `<option value="${a}" ${!gleich && r.art === a ? "selected" : ""}>${n}</option>`).join("");
+        return `<div class="rule">
+            <span class="rule__name">${key === "standard" ? "<strong>Standard</strong>" : name}</span>
+            <input class="soft-input" type="number" min="0" step="0.5" inputmode="decimal" data-wert="${key}" value="${gleich ? "" : r.wert}" ${gleich ? "disabled" : ""} aria-label="Menge ${name}">
+            <select class="soft-input" data-art="${key}" aria-label="Art ${name}">${opts}</select>
+        </div>`;
+    };
+    $("#fRules").innerHTML = zeile("standard", "Standard") + Object.entries(TYPEN).map(([id, t]) => zeile(id, t.kurz)).join("");
+    renderVorschau();
+}
+
+function renderVorschau() {
+    const r = state.reise;
+    const probe = { ...entwurf, max: +$("#fMax").value || null };
+    const n = menge(probe);
+    const passt = !probe.typen.length || probe.typen.includes(r.typ);
+    $("#fPreview").innerHTML = passt
+        ? `Für diese Reise (${r.tage} ${r.tage === 1 ? "Tag" : "Tage"} ${TYPEN[r.typ].kurz}): <strong>${n} Stück</strong>${probe.wetter !== "immer" ? ` ${WETTER[probe.wetter].name.replace("Bei", "bei")}` : ""}${probe.fuer === "beide" ? " pro Person" : ""}`
+        : `Bei dieser Reise (${TYPEN[r.typ].kurz}) nicht dabei.`;
+}
+
+$("#editor").addEventListener("click", (ev) => {
+    const b = ev.target.closest("button");
+    if (!b) return;
+    if (b.dataset.kat) { entwurf.kat = b.dataset.kat; $("#fKat").value = ""; }
+    else if (b.dataset.fuer) entwurf.fuer = b.dataset.fuer;
+    else if (b.dataset.typen) { const t = b.dataset.typen; entwurf.typen = entwurf.typen.includes(t) ? entwurf.typen.filter((x) => x !== t) : [...entwurf.typen, t]; }
+    else if (b.dataset.wetter) entwurf.wetter = b.dataset.wetter;
+    else return;
+    renderEditor();
+});
+$("#fKat").addEventListener("input", (ev) => {
+    const v = ev.target.value.trim();
+    if (v) { entwurf.kat = v; document.querySelectorAll("#fKatChips .chip").forEach((c) => c.classList.toggle("is-active", c.dataset.kat.toLowerCase() === v.toLowerCase())); }
+});
+$("#fRules").addEventListener("input", (ev) => {
+    const w = ev.target.dataset.wert;
+    if (w && entwurf.menge[w]) { entwurf.menge[w].wert = Math.max(0, +ev.target.value || 0); renderVorschau(); }
+});
+$("#fRules").addEventListener("change", (ev) => {
+    const k = ev.target.dataset.art;
+    if (!k) return;
+    const v = ev.target.value;
+    if (v === "gleich") delete entwurf.menge[k];
+    else entwurf.menge[k] = { art: v, wert: entwurf.menge[k] ? entwurf.menge[k].wert : (v === "tage" ? 2 : 1) };
+    if (v === "tage" && entwurf.menge[k].wert < 1) entwurf.menge[k].wert = 2;
+    renderEditor();
+});
+$("#fMax").addEventListener("input", renderVorschau);
+
+$("#editor").addEventListener("submit", (ev) => {
+    ev.preventDefault();
+    const name = $("#fName").value.trim();
+    if (!name) return $("#fName").focus();
+    const neueKat = $("#fKat").value.trim();
+    if (neueKat) entwurf.kat = kategorien().find((k) => k.toLowerCase() === neueKat.toLowerCase()) || neueKat;
+    entwurf.name = name;
+    entwurf.max = +$("#fMax").value || null;
+    entwurf.updated = Date.now();
+    // Während das Popup offen war, kann ein Sync die Liste ersetzt haben: deshalb über die id suchen
+    const vorhanden = bearbeitet && state.items.find((i) => i.id === bearbeitet.id);
+    if (vorhanden) Object.assign(vorhanden, entwurf);
+    else state.items.push({ ...entwurf, id: entwurf.id || "i" + Date.now().toString(36) + Math.random().toString(36).slice(2, 5) });
+    speichern();
+    schliesse($("#editModal"));
+    renderAlles();
+    toast(bearbeitet ? "Gespeichert" : `„${name}“ hinzugefügt`);
+});
+
+$("#fDelete").addEventListener("click", () => {
+    if (!bearbeitet) return;
+    const idx = state.items.findIndex((i) => i.id === bearbeitet.id), weg = state.items[idx];
+    if (idx < 0) return schliesse($("#editModal"));
+    state.items.splice(idx, 1);
+    state.geloescht[weg.id] = Date.now();
+    speichern();
+    schliesse($("#editModal"));
+    renderAlles();
+    toast(`„${weg.name}“ gelöscht`, () => { delete state.geloescht[weg.id]; weg.updated = Date.now(); state.items.splice(idx, 0, weg); speichern(); renderAlles(); });
+});
+
+$("#fab").addEventListener("click", () => oeffneEditor(null));
+
+/* Zurücksetzen */
+$("#resetBtn").addEventListener("click", () => oeffne($("#resetModal")));
+$("#resetChecks").addEventListener("click", () => {
+    const alt = aktiveHaekchen();
+    state.gepackt = {}; state.zurueckgesetzt = Date.now();
+    speichern(); schliesse($("#resetModal")); renderAlles();
+    toast("Alle Häkchen entfernt", () => { wiederherstellen(alt); speichern(); renderAlles(); });
+});
+$("#resetAll").addEventListener("click", () => {
+    const alt = { gepackt: aktiveHaekchen(), reise: state.reise };
+    state.gepackt = {}; state.zurueckgesetzt = Date.now();
+    state.reise = { ...neueReise(), updated: Date.now() };
+    speichern(); schliesse($("#resetModal")); ladeWetter();
+    toast("Neue Reise begonnen", () => { wiederherstellen(alt.gepackt); state.reise = { ...alt.reise, updated: Date.now() }; speichern(); ladeWetter(); });
+});
+
+/* Rückgängig nach dem Zurücksetzen: die Häkchen bekommen einen neuen Zeitpunkt, damit sie auch auf anderen Geräten wieder gelten */
+function aktiveHaekchen() { return Object.fromEntries(Object.keys(state.gepackt).map((k) => [k, eingepackt(k)]).filter(([, n]) => n > 0)); }
+function wiederherstellen(h) { const t = Date.now(); for (const [k, n] of Object.entries(h)) state.gepackt[k] = { n, t }; }
+
+/* Hinweis unten */
+let toastTimer;
+function toast(text, rueckgaengig) {
+    $("#toastText").textContent = text;
+    const u = $("#toastUndo");
+    u.hidden = !rueckgaengig;
+    u.onclick = () => { rueckgaengig(); $("#toast").classList.remove("is-visible"); };
+    $("#toast").classList.add("is-visible");
+    clearTimeout(toastTimer);
+    toastTimer = setTimeout(() => $("#toast").classList.remove("is-visible"), 4500);
+}
+
+/* ==========================================================
+   Anmeldung: PBKDF2-SHA256 -> AES-256-CBC + HMAC-SHA256
+   zugang.json enthält den GitHub-Zugang, verschlüsselt mit dem Passwort
+   (erzeugt von werkzeuge/einrichten.ps1). Fehlt die Datei, läuft die lokale Vorschau.
+========================================================== */
+
+let payload = null;
+const fromB64 = (s) => Uint8Array.from(atob(s), (c) => c.charCodeAt(0));
+const toB64 = (a) => btoa(String.fromCharCode(...a));
+
+async function deriveKey(password) {
+    const base = await crypto.subtle.importKey("raw", new TextEncoder().encode(password), "PBKDF2", false, ["deriveBits"]);
+    const bits = await crypto.subtle.deriveBits({ name: "PBKDF2", hash: "SHA-256", salt: fromB64(payload.salt), iterations: payload.iter }, base, 512);
+    return new Uint8Array(bits);
+}
+async function decrypt(keyBytes) {
+    const encKey = await crypto.subtle.importKey("raw", keyBytes.slice(0, 32), "AES-CBC", false, ["decrypt"]);
+    const macKey = await crypto.subtle.importKey("raw", keyBytes.slice(32), { name: "HMAC", hash: "SHA-256" }, false, ["verify"]);
+    const iv = fromB64(payload.iv), data = fromB64(payload.data);
+    const signed = new Uint8Array(iv.length + data.length);
+    signed.set(iv); signed.set(data, iv.length);
+    if (!await crypto.subtle.verify("HMAC", macKey, fromB64(payload.mac), signed)) throw new Error("Falsches Passwort");
+    const plain = await crypto.subtle.decrypt({ name: "AES-CBC", iv }, encKey, data);
+    return JSON.parse(new TextDecoder().decode(plain));
+}
+function rememberKey(keyBytes) {
+    try { localStorage.setItem(KEY_STORE, JSON.stringify({ salt: payload.salt, key: toB64(keyBytes) })); } catch (e) {}
+}
+function forgetKey() {
+    try { localStorage.removeItem(KEY_STORE); } catch (e) {}
+}
+function storedKey() {
+    try {
+        const s = JSON.parse(localStorage.getItem(KEY_STORE));
+        return s && s.salt === payload.salt ? fromB64(s.key) : null;
+    } catch (e) { return null; }
+}
+
+async function start(access) {
+    remote = access;
+    started = true;
+    $("#footerInfo").textContent = remote ? "Packliste · Bergliacht · Wetter von Open-Meteo" : "Lokale Vorschau · gespeichert nur in diesem Browser";
+    const cached = leseCache();
+    $("#lock").classList.add("is-leaving");
+    document.body.classList.remove("is-locked");
+    renderAlles();
+    ladeWetter();
+    if (!remote) return;
+    if (!cached) $("#view").innerHTML = `<div class="loading">Packliste wird geladen …</div>`;
+    await sync();
+    if (!cached) renderAlles();
+}
+
+const lockForm = $("#lockForm"), lockInput = $("#lockInput"), lockButton = $("#lockButton"), lockError = $("#lockError");
+function fail(message) {
+    lockError.textContent = message;
+    lockForm.classList.remove("is-error"); void lockForm.offsetWidth; lockForm.classList.add("is-error");
+    lockInput.select();
+}
+lockForm.addEventListener("submit", async (e) => {
+    e.preventDefault();
+    if (!lockInput.value) return fail("");
+    lockButton.disabled = true;
+    lockButton.textContent = "Wird entsperrt …";
+    lockError.textContent = "";
+    try {
+        if (!payload) return start(null);
+        const key = await deriveKey(lockInput.value);
+        const access = await decrypt(key);
+        if ($("#lockRemember").checked) rememberKey(key); else forgetKey();
+        lockInput.value = "";
+        start(access);
+    } catch (err) {
+        fail("Das Passwort stimmt nicht.");
+    } finally {
+        lockButton.disabled = false;
+        lockButton.textContent = "Entsperren";
+    }
+});
+
+function logout() {
+    if (dirty && remote && !confirm("Noch nicht alles ist auf GitHub gespeichert. Trotzdem abmelden?")) return;
+    forgetKey();
+    try { localStorage.removeItem(SPEICHER); } catch (e) {}
+    location.href = location.pathname;
+}
+$("#lockBtn").addEventListener("click", logout);
+$("#logout").addEventListener("click", logout);
+$("#sync").addEventListener("click", () => { if (started) sync(); });
+
+// Beim Laden: gemerkten Schlüssel ausprobieren, sonst Passwort abfragen
+(async () => {
+    try { const r = await fetch("zugang.json", { cache: "no-store" }); if (r.ok) payload = await r.json(); } catch (e) {}
+    $("#lockHint").hidden = !!payload;
+    const key = payload && storedKey();
+    if (key) {
+        try { return start(await decrypt(key)); } catch (e) { forgetKey(); }
+    }
+    $("#lock").classList.remove("is-checking");
+    lockInput.focus();
+})();
+</script>
+</body>
+</html>
